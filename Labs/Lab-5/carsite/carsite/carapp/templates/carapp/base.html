@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="{% static 'carapp/style.css' %}">
+  <title>CarSite - {% block title %} Welcome! {% endblock %}</title>
+</head>
+<body>
+<div>
+  <h1>{% block myhdg %} Welcome to our online car store {% endblock %}</h1>
+  {% block body_block %}*** {% endblock %}
+</div>
+<hr />
+<div>
+  <ul class="links">
+      <li class="hbar1"><a href="{% url 'aboutus' %}">Find out
+about this site</a></li>
+      <li class="hbar1"><a href = "{% url 'homepage' %}"> Click here to
+return to the home page </a><br/></li>
+      <li class="hbar1"><a href = "{% url 'vehicles' %}"> Vehicles </a><br/></li>
+  </ul>
+</div>
+</body>
+</html>

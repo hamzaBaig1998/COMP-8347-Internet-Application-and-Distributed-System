@@ -1,0 +1,47 @@
+treadmill
+cardio
+10
+
+lifting bars
+accessories
+20
+
+exercise bikes
+cardio
+15
+
+weights
+strength
+18
+
+rigs
+machine
+25
+
+dumbbells
+strength
+30
+
+gym mats
+accessories
+14
+
+steppers
+cardio
+7
+
+exercise balls
+accessories
+15
+
+rowing machine
+cardio
+8
+
+bands & tubing
+accessories
+14
+
+home gym
+strength
+6

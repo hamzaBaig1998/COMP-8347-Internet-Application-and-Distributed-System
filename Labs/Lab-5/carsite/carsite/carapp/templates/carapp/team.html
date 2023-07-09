@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lab Members</title>
+    <style>
+        h1{
+           text-align: center;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            text-align: center;
+            padding: 8px;
+            border: 1px solid black;
+        }
+        th {
+            background-color: gray;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lab Members</h1>
+       <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Semester</th>
+              <th>Personal Page</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for member in members %}
+              <tr>
+                <td>{{ member.first_name }} {{ member.last_name }}</td>
+                <td>{{ member.semester }}</td>
+                <td><a href="{{ member.link }}" target="_blank">Linkedin</a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+    </table>
+</body>
+</html>

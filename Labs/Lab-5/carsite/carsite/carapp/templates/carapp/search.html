@@ -1,0 +1,22 @@
+{% extends 'carapp/base.html' %}
+
+{% block body_block %}
+  <form method="post" action="{% url 'search' %}">
+    {% csrf_token %}
+    <label for="selected_vehicle">Select a vehicle:</label>
+    <select name="selected_vehicle" id="selected_vehicle">
+        {% for vehicle in vehicles %}
+            <option value="{{ vehicle.id }}">{{ vehicle.car_name }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Filter</button>
+    </form>
+
+    {% if selected_vehicle %}
+        <h1>{{ selected_vehicle.car_name }}</h1>
+        <p>Price: ${{ selected_vehicle.car_price }}</p>
+    {% endif %}
+{% endblock %}
+
+
+

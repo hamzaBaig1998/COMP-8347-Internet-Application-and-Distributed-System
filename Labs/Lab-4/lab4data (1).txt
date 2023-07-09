@@ -1,0 +1,56 @@
+CarType
+1. Toyota		
+2. Nissan 
+3. Ford
+4. Honda 
+5. Mercedes
+6. Cadillac 
+
+Buyer*
+
+1. Alex Jack		123 Paul Martin		Windsor		1-6
+2. Ali Basir		444 St. Michel		Toronto		1-4 
+3. Lara Paul	     788 Dominion Avenue		Waterloo	4,5,6
+4. Roland Smith         127 Howard Avenue		Chatham		2,4
+5. Lina Fotse           799 Wyandotte Street            Windsor         3,4,6
+
+
+
+* Use the first name in lower case letters for 'username' and 'password'
+
+Vehicle**
+
+1. Corolla			Toyota			25000		5
+2. Camery			Toyota			33000		4
+3. RAV4			Toyota			50000		2
+
+5. ARIYA			Nissan 		       59000      0
+6. Sentra			Nissan 			 23500	4
+
+8. FUSION HYBRID	      Ford	            	25000		14
+9. Escape SEL	    Ford		            39100		8
+10. Explorer XLT     Ford	                 35000		0
+11. EcoSport	   Ford		          25000		24		
+12. Bronco Sport Badlands  Ford			45000		12
+
+12. CR-V		Honda		       37000	             8
+13. Civic		Honda		23000		                  19
+
+14. CLA 250	      Mercedes		45000             	10
+15. GLA 250		Mercedes		33000				12
+
+** If the number of vehicles in stock is 0, the 'available' flag for that product should be False.
+
+ORDERS***
+
+1. Corolla by Alex Jack 2 units where order status is successful 
+2. Sendta by Lara Paul 1 unit where order status is shipped  
+3. ARIYA by Lina Fotse 1 unit where order status is cancelled 
+4. Civic by Roland Smith 5 units where order status is delivered  
+
+*** Use the model's default value for date field of an order 
+
+
+
+
+
