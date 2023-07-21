@@ -1,0 +1,10 @@
+{% if orders %}
+    <h1>Orders placed by {{ request.user.username }}</h1>
+    <ul>
+        {% for order in orders %}
+            <li>{{ order }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>{{ message }}</p>
+{% endif %}

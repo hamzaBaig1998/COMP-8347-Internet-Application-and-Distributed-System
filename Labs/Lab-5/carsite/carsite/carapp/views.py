@@ -63,8 +63,54 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse
 
 from .forms import OrderVehicleForm
-from .models import Vehicle, GroupMember, CarType, Buyer
+from .models import Vehicle, GroupMember, CarType, Buyer, OrderVehicle
 from django.shortcuts import render
+
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse
+from django.http import HttpResponseRedirect, HttpResponse
+
+def login_here(request):
+    if request.method == 'POST':
+        # Get the username and password from the POST request
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        # Authenticate the user
+        user = authenticate(request, username=username, password=password)
+        # If the user is authenticated successfully
+        if user is not None:
+            if user.is_active:
+                # Log the user in and redirect to the homepage
+                login(request, user)
+                return HttpResponseRedirect(reverse('homepage'))
+            else:
+                # Return an error message if the user account is disabled
+                return HttpResponse('Your account is disabled')
+        else:
+            # Return an error message if the login details are incorrect
+            return HttpResponse('Login details are incorrect')
+    else:
+        # Render the login page if the request method is GET
+        return render(request, 'carapp/login_here.html')
+
+@login_required
+def logout_here(request):
+    # Log the user out and redirect to the homepage
+    logout(request)
+    return HttpResponseRedirect(reverse('homepage'))
+
+@login_required
+def list_of_orders(request):
+    # Check if the user is a buyer
+    if request.user.groups.filter(name='Buyers').exists():
+        # Get all orders placed by the user
+        orders = OrderVehicle.objects.filter(buyer=request.user)
+        # Render the list of orders template with the orders
+        return render(request, 'carapp/list_of_orders.html', {'orders': orders})
+    else:
+        # Return a message if the user is not a buyer
+        return render(request, 'carapp/list_of_orders.html', {'message': 'You are not registered'})
 
 
 class HomepageView(View):
