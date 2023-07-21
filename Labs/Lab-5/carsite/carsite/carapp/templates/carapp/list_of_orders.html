@@ -1,0 +1,14 @@
+{% extends 'carapp/base.html' %}
+
+{% block content %}
+  {% if orders %}
+    <h2>List of Orders</h2>
+    <ul>
+      {% for order in orders %}
+        <li>{{ order }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>{{ message }}</p>
+  {% endif %}
+{% endblock %}

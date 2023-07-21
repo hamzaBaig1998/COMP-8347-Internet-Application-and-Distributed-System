@@ -1,0 +1,24 @@
+{% extends 'carapp/base.html' %}
+
+{% block body_block %}
+  <h1>Place your order here</h1>
+  <p>You can place your order here.</p>
+    <form method="post" action="{% url 'order' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Order</button>
+    </form>
+
+    {% if msg %}
+        <p>{{ msg }}</p>
+    {% endif %}
+
+    <h2>Available Vehicles</h2>
+
+    <ul>
+        {% for vehicle in vehiclelist %}
+            <li><a href="{% url 'cardetail' vehicle.id %}">{{ vehicle.car_name }}</a>   {{ vehicle.inventory }}</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

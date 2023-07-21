@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lab Members</title>
+</head>
+<body>
+    <h1>Lab Members</h1>
+    <ul>
+        {% for member in members %}
+            <li>{{ member.first_name }} {{ member.last_name }} - Semester {{ member.semester }} (<a href="{{ member.link }}">Personal Page</a>)</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
