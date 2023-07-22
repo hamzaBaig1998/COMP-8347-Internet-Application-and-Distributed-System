@@ -31,6 +31,22 @@ class Fx(models.Model):
     class Meta:
         ordering = ['fx_name']
 
+
+class Order(models.Model):
+    order_id = models.CharField(max_length=100)
+    user_id = models.IntegerField()
+    tier = models.CharField(max_length=10)
+    amount_cad = models.IntegerField()
+    amount_fx = models.DecimalField(max_digits=10, decimal_places=2)
+    fx_choice = models.IntegerField()
+    order_time = models.DateTimeField()
+    card_last_6 = models.IntegerField(max_length=6)
+    result = models.BooleanField()
+
+    def __str__(self):
+        user = User.objects.get(id=self.user_id)
+        return f"{self.order_id}, {user}, {self.tier}, {self.amount_cad}, {self.result}"
+
 # class Membership(models.Model):
 #     slug = models.SlugField()
 #     membership_type = models.CharField(choices=MEMBERSHIP_CHOICES, default='Free', max_length=30)
@@ -62,4 +78,3 @@ class Fx(models.Model):
 #
 # post_save.connect(post_save_create_user_membership, User)
 #
-

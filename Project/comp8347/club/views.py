@@ -1,8 +1,10 @@
+import datetime
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, ListView, DetailView, View
 # from club.models import Membership, UserMembership, Subscription, Club
-from club.models import Club, Fx
+from club.models import Club, Fx, Order
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -94,6 +96,28 @@ def compute_uuid():
     return uuid.uuid4()
 
 
+def save_order(session_data, card_details, outcome):
+    current_dt = datetime.datetime.now()
+    fx_amount = session_data['fx_amount']
+    fx_choice = session_data['fx_choice']
+    amount = session_data['amount']
+    order_id = session_data['oid']
+    user_id = session_data['uid']
+    tier = session_data['tier']
+    card_detail = card_details['card_number']
+    order = Order.objects.create(order_id=order_id,
+                                 user_id=user_id,
+                                 tier=tier,
+                                 amount_cad=amount,
+                                 amount_fx=fx_amount,
+                                 fx_choice=fx_choice,
+                                 order_time=current_dt,
+                                 card_last_6=card_detail,
+                                 result=outcome)
+    print(f"Saved order {order}")
+    return order
+
+
 @method_decorator(login_required, name='post')  # to enforce login is done before accessing the post method
 class PayView(View):
     def get(self, request):
@@ -112,9 +136,11 @@ class PayView(View):
 
             # request.session.clear()
             request.session['fx_amount'] = amount
+            request.session['fx_choice'] = fx.id
             request.session['amount'] = tier.price
             request.session['oid'] = str(order_id)
             request.session['uid'] = user_id
+            request.session['tier'] = tier.tier
 
             return render(request, "club/payment.html", context={
                 "tier": tier,
@@ -130,10 +156,12 @@ class PayView(View):
 
             if data['result'] == "Ok":
                 print("Payment done!")
-                return
+                save_order(request.session, request.POST, True)
+                return render(request, "club/paymentOk.html")
             else:
                 print("Payment failed!")
-                return redirect('/')
+                save_order(request.session, request.POST, False)
+                return render(request, "club/paymentFail.html")
 
 # class MembershipSelectView(ListView):
 #     template_name = 'club/club_details.html'
