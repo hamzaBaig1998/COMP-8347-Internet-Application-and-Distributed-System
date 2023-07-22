@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block post_detail_link %}
+
+{% endblock %}
+
+{% block content %}
+    <!-- Page info -->
+    {#    <div class="page-info-section set-bg" data-setbg="{% static 'webuni/img/page-bg/2.jpg' %}">#}
+    {#        <div class="container">#}
+    {#            <div class="site-breadcrumb">#}
+    {#                <a href="#">Home</a>#}
+    {#                <span>Courses/</span>#}
+    {#                <span>memberships/</span>#}
+    {#            </div>#}
+    {#        </div>#}
+    {#    </div>#}
+    <!-- Page info end -->
+    {#    {% if messages %}#}
+    {#        <ul class="messages">#}
+    {#            {% for message in messages %}#}
+    {#                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>#}
+    {#            {% endfor %}#}
+    {#        </ul>#}
+    {#    {% endif %}#}
+    <div class="container">
+        <h1 class="pb-4">Club Tiers</h1>
+        <div class="row">
+            {% for tier in tiers %}
+                <div class="col-sm-4 col-md-4">
+                    <h3>{{ tier.tier }}</h3>
+                    <h4>Price: ${{ tier.price }} <small>/month</small></h4>
+                    <h5>Courses included in this tier:</h5>
+                    <ul>
+                        {% for key, detail in club_details.items %}
+                            {% if key == tier.tier %}
+                                {% for data in detail %}
+                                    <li>{{ data }}</li>
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="row">
+            <form method="post" action="{% url 'club:pay' %}">
+                {% csrf_token %}
+                {{ form.as_div }}
+                <input type="submit" value="Proceed">
+            </form>
+        </div>
+        {#                    {% if tier.membership_type != 'Free' %}#}
+        {#                        <form class="" action="{% url 'club:select_membership' %}" method="POST">#}
+        {#                            {% csrf_token %}#}
+        {#                            {% if tier.membership_type != current_membership %}#}
+        {#                                <button type="submit" class="btn btn-warning">Select</button>#}
+        {#                            {% else %}#}
+        {#                                <small>This is Your Current Plan</small>#}
+        {#                            {% endif %}#}
+        {#                            <input type="hidden" name="membership_type" value="{{ tier.membership_type }}">#}
+        {#                        </form>#}
+        {#                    {% endif %}#}
+    </div>
+
+{% endblock content %}
