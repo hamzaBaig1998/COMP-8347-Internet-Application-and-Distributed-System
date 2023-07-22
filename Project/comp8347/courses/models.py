@@ -1,5 +1,4 @@
 from django.db import models
-from memberships.models import Membership
 from django.contrib.auth.models import User
 from django.urls import reverse
 # Create your models here.
@@ -20,7 +19,6 @@ class Course(models.Model):
     duration = models.CharField(max_length=10,help_text = 'please use the following formats : 1 Week or 1 Month')
     starting_date = models.DateField(null=True)
     ending_date = models.DateField(null=True)
-    allowed_memberships = models.ManyToManyField(Membership,related_name='membershipsallowed')
 
     def __str__(self):
         return self.title
