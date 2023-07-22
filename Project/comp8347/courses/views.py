@@ -1,51 +1,68 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView,ListView,DetailView,View
-from courses.models import Course,Lesson,Category
-from memberships.models import UserMembership
 from django.shortcuts import render, get_object_or_404
-from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
-# Create your views here.
+from django.views.generic import TemplateView, ListView, DetailView, View
+from django.contrib.auth.mixins import LoginRequiredMixin
+from courses.models import Course, Lesson, Category
+from memberships.models import UserMembership
 
+
+# View for the home page
 class HomeView(TemplateView):
     template_name = 'index.html'
 
     def get_context_data(self, **kwargs):
+        # Retrieve all categories and add them to the context
         context = super().get_context_data(**kwargs)
-        category = Category.objects.all()
-        context['category'] = category
+        context['category'] = Category.objects.all()
         return context
 
+
+# View for the about page
 class AboutView(TemplateView):
     template_name = 'about.html'
 
+
+# View for the contact page
 class ContactView(TemplateView):
     template_name = 'contact.html'
 
+
+# View for the course list page
 class CourseListView(ListView):
-    context_object_name = 'courses'
+    model = Course  # Use the Course model
+    context_object_name = 'courses'  # Use 'courses' as the context variable name
     template_name = 'courses/course_list.html'
-    model = Course
 
 
+# View for the course detail page
 class CourseDetailView(DetailView):
-    context_object_name = 'course'
+    model = Course  # Use the Course model
+    context_object_name = 'course'  # Use 'course' as the context variable name
     template_name = 'courses/course_detail.html'
-    model = Course
 
-#
-class LessonDetailView(View,LoginRequiredMixin):
+
+# View for the lesson detail page
+class LessonDetailView(LoginRequiredMixin, View):
     def get(self, request, course_slug, lesson_slug, *args, **kwargs):
+        # Retrieve the course and lesson objects
         course = get_object_or_404(Course, slug=course_slug)
         lesson = get_object_or_404(Lesson, slug=lesson_slug)
+
+        # Retrieve the user's membership and its type
         user_membership = get_object_or_404(UserMembership, user=request.user)
         user_membership_type = user_membership.membership.membership_type
+
+        # Retrieve the membership types allowed for the course
         course_allowed_membership_type = course.allowed_memberships.all()
-        print(course_allowed_membership_type.filter(membership_type=user_membership_type))
-        context = { 'lesson': None }
+
+        # If the user's membership type is allowed for the course, show the lesson
         if course_allowed_membership_type.filter(membership_type=user_membership_type).exists():
             context = {'lesson': lesson}
-        return render(request, "courses/lesson_detail.html", context)
+        # Otherwise, do not show the lesson
+        else:
+            context = {'lesson': None}
 
+        return render(request, "courses/lesson_detail.html", context)
+    
 
 # def get(self,request,course_slug,lesson_slug,*args,**kwargs):
 #
