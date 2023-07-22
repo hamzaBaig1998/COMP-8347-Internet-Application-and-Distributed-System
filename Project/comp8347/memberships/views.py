@@ -1,6 +1,6 @@
-from django.shortcuts import render,redirect
-from django.views.generic import TemplateView,ListView,DetailView,View
-from memberships.models import Membership,UserMembership,Subscription
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import TemplateView, ListView, DetailView, View
+from memberships.models import Membership, UserMembership, Subscription
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
 
+
 # Create your views here.
 def get_user_membership(request):
     user_membership_qs = UserMembership.objects.filter(user=request.user)
@@ -17,19 +18,22 @@ def get_user_membership(request):
         return user_membership_qs.first()
     return None
 
+
 def get_user_subscription(request):
-    user_subscription_qs = Subscription.objects.filter(user_membership = get_user_membership(request))
+    user_subscription_qs = Subscription.objects.filter(user_membership=get_user_membership(request))
     if user_subscription_qs.exists():
         user_subscription = user_subscription_qs.first()
         return user_subscription
     return None
 
+
 def get_selected_membership(request):
-    membership_type =  request.session['selected_membership_type']
+    membership_type = request.session['selected_membership_type']
     selected_membership_qs = Membership.objects.filter(membership_type=membership_type)
-    if selected_membership_qs.exists():
-        return selected_membership_qs.first()
+
+    if selected_membership_qs.exists(): return selected_membership_qs.first()
     return None
+
 
 class MembershipSelectView(ListView):
     template_name = 'memberships/membership_list.html'
@@ -42,7 +46,7 @@ class MembershipSelectView(ListView):
         context['current_membership'] = str(current_membership.membership)
         return context
 
-    def post(self,request,*args,**kwargs):
+    def post(self, request, *args, **kwargs):
         selected_membership_type = request.POST.get('membership_type')
 
         user_membership = get_user_membership(self.request)
@@ -84,7 +88,7 @@ def PaymentView(request):
         '''
 
         customer = stripe.Customer.retrieve(user_membership.stripe_customer_id)
-        customer.source = token # 4242424242424242
+        customer.source = token  # 4242424242424242
         customer.save()
 
         '''
@@ -95,7 +99,7 @@ def PaymentView(request):
         subscription = stripe.Subscription.create(
             customer=user_membership.stripe_customer_id,
             items=[
-                { "plan": selected_membership.stripe_plan_id },
+                {"plan": selected_membership.stripe_plan_id},
             ]
         )
         print(subscription.id)
@@ -115,6 +119,7 @@ def PaymentView(request):
 
     return render(request, "memberships/membership_payment.html", context)
 
+
 @login_required
 def UpdateTransactionRecords(request, subscription_id):
     user_membership = get_user_membership(request)
@@ -122,8 +127,7 @@ def UpdateTransactionRecords(request, subscription_id):
     user_membership.membership = selected_membership
     user_membership.save()
 
-    sub, created = Subscription.objects.get_or_create(
-        user_membership=user_membership)
+    sub, created = Subscription.objects.get_or_create(user_membership=user_membership)
     sub.stripe_subscription_id = subscription_id
     sub.active = True
     sub.save()
@@ -133,9 +137,9 @@ def UpdateTransactionRecords(request, subscription_id):
     except:
         pass
 
-    messages.info(request, 'Successfully created {} membership'.format(
-        selected_membership))
+    messages.info(request, 'Successfully created {} membership'.format(selected_membership))
     return redirect(reverse('memberships:select_membership'))
+
 
 @login_required
 def CancelSubscription(request):
@@ -155,11 +159,10 @@ def CancelSubscription(request):
     user_membership = get_user_membership(request)
     user_membership.membership = free_membership
     user_membership.save()
-    user = get_object_or_404(User,username=request.username)
+    user = get_object_or_404(User, username=request.username)
     user_email = user.email
 
-    messages.info(
-        request, "Successfully cancelled membership. We have sent an email")
+    messages.info(request, "Successfully cancelled membership. We have sent an email")
     # sending an email here
     send_mail(
         'Subscription successfully cancelled',
@@ -168,5 +171,5 @@ def CancelSubscription(request):
         [user_email],
         fail_silently=False,
     )
-    
+
     return redirect(reverse('memberships:select'))
