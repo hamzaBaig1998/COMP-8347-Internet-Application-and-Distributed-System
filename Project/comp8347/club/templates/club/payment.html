@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div class='container'>
+    <h1>Payment</h1>
+    <div class="row">
+        <p>Tier Chosen : {{ tier.tier }}</p>
+        <p>Price : {{ fx_sign }} {{ amount|floatformat:2 }} per month</p>
+        <form action="{% url 'club:pay' %}" method="post">
+            {% csrf_token %}
+            {{ pay_form.as_p }}
+            <input type="submit" value="Pay">
+        </form>
+    </div>
+</div>
+</body>
+</html>

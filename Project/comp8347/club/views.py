@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, ListView, DetailView, View
 # from club.models import Membership, UserMembership, Subscription, Club
-from club.models import Club
+from club.models import Club, Fx
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -11,7 +12,10 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
-from club.forms import TierForm
+from club.forms import TierForm, FxForm, PaymentForm
+from club.FxUtil import compute_fx_amount, SYMBOL_MAP, clear_fx_cache
+import json
+
 
 # Create your views here.
 # def get_user_membership(request):
@@ -37,11 +41,28 @@ from club.forms import TierForm
 #     return None
 #
 
+def compute_fx_details(price):
+    data = {}
+    for currency in SYMBOL_MAP.keys():
+        data[currency] = compute_fx_amount(currency, price)
+    return data
+
+
 class ClubView(View):
+
     def get(self, request):
+        fx_form = FxForm()
+        return render(request, "club/club_details.html", context={'fx_form': fx_form, 'type': 'get'})
+
+    def post(self, request):
+        clear_fx_cache()
+
+        fx_choice = Fx.objects.get(id=request.POST['fx_choice'])
+        print(fx_choice.fx_code)
         clubs = Club.objects.all()
         # print(f"Club details => {clubs}")
         club_details = {}
+        fx_details = {}
         for club in clubs:
             # print(f"Club data => {club}, club detail => {club.details}")
             details = club.details.split("\n")
@@ -53,18 +74,66 @@ class ClubView(View):
                     club_details[tier].append(detail)
                 else:
                     club_details[tier] = [detail]
+            fx_details[club.price] = compute_fx_details(club.price)
         # print(club_details)
-        form = TierForm()
-        return render(request, "club/club_details.html", context={'tiers': clubs, 'club_details': club_details, 'form': form})
+        print(fx_details)
+        tier_form = TierForm()
+        request.session['fx_id'] = fx_choice.id
+        request.session['fx_details'] = json.dumps(fx_details)
+        print(request.session['fx_details'])
+        return render(request, "club/club_details.html", context={'tiers': clubs,
+                                                                  'club_details': club_details,
+                                                                  'tier_form': tier_form,
+                                                                  'fx_details': fx_details,
+                                                                  'fx_choice': fx_choice.fx_code,
+                                                                  'fx_sign': fx_choice.fx_sign})
 
+
+def compute_uuid():
+    import uuid
+    return uuid.uuid4()
+
+
+@method_decorator(login_required, name='post')  # to enforce login is done before accessing the post method
 class PayView(View):
     def get(self, request):
-        print("from pay function!!")
-        pass
+        return redirect('club:club_details')
 
     def post(self, request):
-        print("from pay function post!!")
-        pass
+        if "card_number" not in request.POST:
+            print(f"Post data => {request.POST}")
+            fx = Fx.objects.get(id=request.session['fx_id'])
+            fx_details = dict(json.loads(request.session['fx_details']))
+            user_id = request.user.id
+            order_id = compute_uuid()
+            tier = Club.objects.get(id=request.POST['options'])
+            amount = fx_details.get(str(tier.price)).get(fx.fx_code)
+            pay_form = PaymentForm()
+
+            # request.session.clear()
+            request.session['fx_amount'] = amount
+            request.session['amount'] = tier.price
+            request.session['oid'] = str(order_id)
+            request.session['uid'] = user_id
+
+            return render(request, "club/payment.html", context={
+                "tier": tier,
+                "fx_sign": fx.fx_sign,
+                "amount": amount,
+                "pay_form": pay_form
+            })
+        else:
+            # the user has entered some details and here we need to request the external server for payment status
+            import requests
+            txn = requests.post("http://127.0.0.1:8083/pay", data=dict(request.POST))
+            data = json.loads(txn.content)
+
+            if data['result'] == "Ok":
+                print("Payment done!")
+                return
+            else:
+                print("Payment failed!")
+                return redirect('/')
 
 # class MembershipSelectView(ListView):
 #     template_name = 'club/club_details.html'
@@ -148,7 +217,7 @@ class PayView(View):
 #         'selected_membership': selected_membership
 #     }
 #
-#     return render(request, "club/membership_payment.html", context)
+#     return render(request, "club/payment.html", context)
 #
 #
 # @login_required

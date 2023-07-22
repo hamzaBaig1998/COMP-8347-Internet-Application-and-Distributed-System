@@ -1,66 +1,55 @@
-{% extends 'base.html' %}
-{% load static %}
-{% block post_detail_link %}
+{#{% extends 'base.html' %}#}
+{#{% load static %}#}
 
-{% endblock %}
-
+<html>
+<body>
 {% block content %}
-    <!-- Page info -->
-    {#    <div class="page-info-section set-bg" data-setbg="{% static 'webuni/img/page-bg/2.jpg' %}">#}
-    {#        <div class="container">#}
-    {#            <div class="site-breadcrumb">#}
-    {#                <a href="#">Home</a>#}
-    {#                <span>Courses/</span>#}
-    {#                <span>memberships/</span>#}
-    {#            </div>#}
-    {#        </div>#}
-    {#    </div>#}
-    <!-- Page info end -->
-    {#    {% if messages %}#}
-    {#        <ul class="messages">#}
-    {#            {% for message in messages %}#}
-    {#                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>#}
-    {#            {% endfor %}#}
-    {#        </ul>#}
-    {#    {% endif %}#}
     <div class="container">
-        <h1 class="pb-4">Club Tiers</h1>
-        <div class="row">
-            {% for tier in tiers %}
-                <div class="col-sm-4 col-md-4">
-                    <h3>{{ tier.tier }}</h3>
-                    <h4>Price: ${{ tier.price }} <small>/month</small></h4>
-                    <h5>Courses included in this tier:</h5>
-                    <ul>
-                        {% for key, detail in club_details.items %}
-                            {% if key == tier.tier %}
-                                {% for data in detail %}
-                                    <li>{{ data }}</li>
+        {% if type != 'get' %}
+            <h1>Club Tiers</h1>
+            <div class="row">
+                {% for tier in tiers %}
+                    <div>
+                        <h3>{{ tier.tier }}</h3>
+                        {% for key, value in fx_details.items %}
+                            {% if key == tier.price %}
+                                {% for fx, fx_value in value.items %}
+                                    {% if fx_choice == fx %}
+                                        <h4>Price: {{ fx_sign }}{{ fx_value|floatformat:2 }} per month</h4>
+                                    {% endif %}
                                 {% endfor %}
                             {% endif %}
                         {% endfor %}
-                    </ul>
-                </div>
-            {% endfor %}
-        </div>
-        <div class="row">
-            <form method="post" action="{% url 'club:pay' %}">
-                {% csrf_token %}
-                {{ form.as_div }}
-                <input type="submit" value="Proceed">
-            </form>
-        </div>
-        {#                    {% if tier.membership_type != 'Free' %}#}
-        {#                        <form class="" action="{% url 'club:select_membership' %}" method="POST">#}
-        {#                            {% csrf_token %}#}
-        {#                            {% if tier.membership_type != current_membership %}#}
-        {#                                <button type="submit" class="btn btn-warning">Select</button>#}
-        {#                            {% else %}#}
-        {#                                <small>This is Your Current Plan</small>#}
-        {#                            {% endif %}#}
-        {#                            <input type="hidden" name="membership_type" value="{{ tier.membership_type }}">#}
-        {#                        </form>#}
-        {#                    {% endif %}#}
+                        <h5>Courses included in this tier:</h5>
+                        <ul>
+                            {% for key, detail in club_details.items %}
+                                {% if key == tier.tier %}
+                                    {% for data in detail %}
+                                        <li>{{ data }}</li>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="row">
+                <form method="post" action="{% url 'club:pay' %}">
+                    {% csrf_token %}
+                    {{ tier_form.as_div }}
+                    <input type="submit" value="Proceed">
+                </form>
+            </div>
+        {% else %}
+            <div class="row">
+                <form method="post" action="{% url 'club:club_details' %}">
+                    {% csrf_token %}
+                    {{ fx_form.as_div }}
+                    <input type="submit" value="Proceed">
+                </form>
+            </div>
+        {% endif %}
     </div>
-
 {% endblock content %}
+</body>
+</html>

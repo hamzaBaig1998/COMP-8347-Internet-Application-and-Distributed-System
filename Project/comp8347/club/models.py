@@ -1,18 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.conf import settings
-import stripe
-from datetime import datetime
-
-stripe.api_key = settings.STRIPE_SECRET_KEY
-
-# Create your models here.
-MEMBERSHIP_CHOICES = (
-    ('Professional', 'pro'),
-    ('Enterprise', 'ent'),
-    ('Free', 'free')
-)
 
 
 class Club(models.Model):
@@ -28,6 +15,21 @@ class Club(models.Model):
         club.name, club.price, club.details = name, price, details
         Club.objects.create(club)
         print(f"Club objects: {Club.objects.all()}")
+
+    class Meta:
+        ordering = ['price']
+
+
+class Fx(models.Model):
+    fx_name = models.CharField(max_length=25, default="Canadian Dollar")
+    fx_sign = models.CharField(max_length=5, default="C$")
+    fx_code = models.CharField(max_length=5, default="CAD")
+
+    def __str__(self):
+        return f"{self.fx_name}, {self.fx_code}, {self.fx_sign}"
+
+    class Meta:
+        ordering = ['fx_name']
 
 # class Membership(models.Model):
 #     slug = models.SlugField()
@@ -60,21 +62,4 @@ class Club(models.Model):
 #
 # post_save.connect(post_save_create_user_membership, User)
 #
-#
-# class Subscription(models.Model):
-#     user_membership = models.ForeignKey(UserMembership, on_delete=models.CASCADE)
-#     stripe_subscription_id = models.CharField(max_length=40)
-#     active = models.BooleanField(default=False)
-#
-#     def __str__(self):
-#         return self.user_membership.user.username
-#
-#     @property
-#     def get_created_date(self):
-#         subscription = stripe.Subscription.retrieve(self.stripe_subscription_id)
-#         return datetime.fromtimestamp(subscription.created)
-#
-#     @property
-#     def get_next_billing_date(self):
-#         subscription = stripe.Subscription.retrieve(self.stripe_subscription_id)
-#         return datetime.fromtimestamp(subscription.current_period_end)
+
