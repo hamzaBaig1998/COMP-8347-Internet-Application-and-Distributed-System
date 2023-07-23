@@ -6,18 +6,23 @@ from memberships.models import UserMembership
 from courses.form import RequestForm
 
 
-class RequestView(View):
-    def get(self, request):
-        form = RequestForm()
-        return render(request, 'request.html', {'form': form})
-    
-    def post(self, request):
-        form = RequestForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return render(request, 'request_success.html')
-        else:
-            return render(request, 'request.html', {'form': form})
+from django.shortcuts import render, redirect
+from django.views import View
+from .models import Request
+
+class RequestTeacherView(View):
+    template_name = 'index.html'
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+
+    def post(self, request, *args, **kwargs):
+        name = request.POST.get('name')
+        email = request.POST.get('e-mail')
+        phone = request.POST.get('phone')
+        request_obj = Request(name=name, email=email, phone=phone)
+        request_obj.save()
+        return redirect('courses:home')
     
 # View for the home page
 class HomeView(TemplateView):
@@ -110,7 +115,7 @@ class CourseSearchView(ListView):
 
         return queryset
     
-    
+
 # def get(self,request,course_slug,lesson_slug,*args,**kwargs):
 #
 #     course_qs = Course.objects.filter(slug=course_slug)

@@ -114,7 +114,11 @@
             </p>
           </div>
           <!-- signup form -->
-          <form class="signup-form" method="POST">
+          <form
+            class="signup-form"
+            method="POST"
+            action="{% url 'courses:request_teacher' %}"
+          >
             {% csrf_token %}
             <input type="text" placeholder="Your Name" name="name" />
             <input type="text" placeholder="Your E-mail" name="e-mail" />
