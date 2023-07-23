@@ -1,20 +1,31 @@
-{% extends 'base.html' %}
-{% load static %}
-
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block content %}
 <!-- Hero section -->
-<section class="hero-section set-bg" data-setbg="{% static 'webuni/img/bg.jpg'%}">
+<!-- Hero section with a background image -->
+<section
+  class="hero-section set-bg"
+  data-setbg="{% static 'webuni/img/bg.png'%}"
+>
   <div class="container">
+    <!-- Hero text with a title and description -->
     <div class="hero-text text-white">
-      <h2>Get The Best Free Online Courses</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec malesuada lorem maximus mauris scelerisque, at rutrum nulla <br> dictum. Ut ac ligula sapien. Suspendisse cursus faucibus finibus.</p>
+      <h2>Get Started the best Online Courses</h2>
+      <p>
+        Learn new skills and advance your career with our premium courses. Our
+        courses cover a wide range of topics, from programming and web
+        development to business and marketing. Whether you're a beginner or an
+        experienced professional, you'll find the right course for you.
+      </p>
     </div>
+    <!-- Search form for courses with input fields for course name and category -->
     <div class="row">
       <div class="col-lg-10 offset-lg-1">
-        <form class="intro-newslatter">
-          <input type="text" placeholder="Course">
-          <input type="text" class="last-s" placeholder="Category">
+        <form class="intro-newslatter" method="GET">
+          <input type="text" placeholder="Enter course name" />
+          <input
+            type="text"
+            class="last-s"
+            placeholder="Enter course category"
+          />
           <button class="site-btn">Search Courses</button>
         </form>
       </div>
@@ -23,26 +34,28 @@
 </section>
 <!-- Hero section end -->
 
-
 <!-- categories section -->
 <section class="categories-section spad">
   <div class="container">
+    <!-- Section title with a heading and description -->
     <div class="section-title">
       <h2>Our Course Categories</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec malesuada lorem maximus mauris scelerisque, at rutrum nulla dictum. Ut ac ligula sapien. Suspendisse cursus faucibus finibus.</p>
+      <p>
+        Browse our course categories to find the right course for you. We offer
+        a wide range of topics, from programming and web development to business
+        and marketing.
+      </p>
     </div>
+    <!-- Course categories displayed as cards -->
     <div class="row">
       {% for cat in category %}
-      <!-- categorie -->
       <div class="col-lg-4 col-md-6">
-        <div class="categorie-item">
-          <div class="ci-thumb set-bg" data-setbg="{% static 'webuni/img/categories/1.jpg' %}"></div>
-          <div class="ci-text">
-
-            <h5>{{cat|capfirst}}</h5>
-
-            <p>Lorem ipsum dolor sit amet, consectetur</p>
-            <span>120 Courses</span>
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{cat.category|capfirst}}</h5>
+            <p class="card-text">
+              <small class="text-muted">{{cat.course_count}} Courses</small>
+            </p>
           </div>
         </div>
       </div>
@@ -54,20 +67,27 @@
 
 <!-- signup section -->
 <section class="signup-section spad">
-  <div class="signup-bg set-bg" data-setbg="{% static 'webuni/img/signup-bg.jpg' %}"></div>
+  <div
+    class="signup-bg set-bg"
+    data-setbg="{% static 'webuni/img/signup-bg.jpg' %}"
+  ></div>
   <div class="container-fluid">
     <div class="row">
       <div class="col-lg-6">
         <div class="signup-warp">
           <div class="section-title text-white text-left">
             <h2>Sign up to became a teacher</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec malesuada lorem maximus mauris scelerisque, at rutrum nulla dictum. Ut ac ligula sapien. Suspendisse cursus faucibus finibus.</p>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
+              malesuada lorem maximus mauris scelerisque, at rutrum nulla
+              dictum. Ut ac ligula sapien. Suspendisse cursus faucibus finibus.
+            </p>
           </div>
           <!-- signup form -->
           <form class="signup-form">
-            <input type="text" placeholder="Your Name" name="name">
-            <input type="text" placeholder="Your E-mail" name="e-mail">
-            <input type="text" placeholder="Your Phone" name="phone">
+            <input type="text" placeholder="Your Name" name="name" />
+            <input type="text" placeholder="Your E-mail" name="e-mail" />
+            <input type="text" placeholder="Your Phone" name="phone" />
             <button class="site-btn">Make Request</button>
           </form>
         </div>

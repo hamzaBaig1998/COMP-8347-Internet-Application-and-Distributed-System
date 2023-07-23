@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="{% static 'webuni/css/bootstrap.min.css' %}"/>
     <link rel="stylesheet" href="{% static 'webuni/css/font-awesome.min.css' %}"/>
     <link rel="stylesheet" href="{% static 'webuni/css/owl.carousel.css' %}"/>
-    <link rel="stylesheet" href="{% static 'webuni/css/style.css' %}"/>
+    <link rel="stylesheet" href="{% static 'webuni/css/style.css' %}?v={% now 'U' %}"/>
 
 
     <!--[if lt IE 9]>
@@ -45,11 +45,6 @@
                 </div>
             </div>
             <div class="col-lg-9 col-md-9">
-                {% if request.user.is_authenticated %}
-                    <li><a href="{% url 'users:profile' %}" class="site-btn header-btn">Dashboard : {{ request.user.username }}</a></li>
-                {% else %}
-                    <li><a href="{% url 'account_login' %}" class="site-btn header-btn">Login</a></li>
-                {% endif %}
                 <nav class="main-menu">
                     <ul>
                         <li><a href="{% url 'courses:home' %}">Home</a></li>
@@ -58,7 +53,10 @@
                         <li><a href="{% url 'blogs:post_list' %}">News</a></li>
                         <li><a href="{% url 'courses:contact' %}">Contact</a></li>
                         {% if request.user.is_authenticated %}
+                            <li><a href="{% url 'users:profile' %}" class="site-btn header-btn">Dashboard : {{ request.user.username }}</a></li>
                             <li><a href="{% url 'account_logout' %}">Logout</a></li>
+                        {% else %}
+                            <li><a href="{% url 'account_login' %}" class="site-btn header-btn">Login</a></li>
                         {% endif %}
                     </ul>
                 </nav>
