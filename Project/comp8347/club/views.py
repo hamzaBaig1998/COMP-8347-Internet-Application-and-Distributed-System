@@ -1,22 +1,15 @@
 import datetime
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView, ListView, DetailView, View
-# from club.models import Membership, UserMembership, Subscription, Club
-from club.models import Club, Fx, Order
-from django.contrib import messages
-from django.http import HttpResponseRedirect
-from django.urls import reverse
-from django.views import View
-import stripe
-from django.conf import settings
-from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
-from django.contrib.auth.models import User
-from club.forms import TierForm, FxForm, PaymentForm
-from club.FxUtil import compute_fx_amount, SYMBOL_MAP, clear_fx_cache
 import json
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.utils.decorators import method_decorator
+from django.views import View
+
+from club.FxUtil import compute_fx_amount, SYMBOL_MAP, clear_fx_cache
+from club.forms import TierForm, FxForm, PaymentForm
+from club.models import Club, Fx, Order
+from courses.models import Course
 
 
 # Create your views here.
@@ -65,17 +58,12 @@ class ClubView(View):
         # print(f"Club details => {clubs}")
         club_details = {}
         fx_details = {}
+        courses = Course.objects.all()
         for club in clubs:
             # print(f"Club data => {club}, club detail => {club.details}")
-            details = club.details.split("\n")
             tier = club.tier
-            for detail in details:
-                data = club_details.get(tier)
-                detail = detail.strip()
-                if data is not None:
-                    club_details[tier].append(detail)
-                else:
-                    club_details[tier] = [detail]
+            details = [course.title.strip() for course in courses.filter(club=club)]
+            club_details[tier] = details
             fx_details[club.price] = compute_fx_details(club.price)
         # print(club_details)
         print(fx_details)
