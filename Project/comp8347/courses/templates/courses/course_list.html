@@ -47,7 +47,8 @@
           <div class="course-info">
             <div class="course-text">
               <h5>Category : {{course.category}}</h5>
-              <div class="fet-note">Basic Course</div>
+              {% comment %} <div class="fet-note">Basic Course</div> {% endcomment %}
+              <div class="fet-note">{{course.club}}</div>
               <a href="{% url 'courses:course_detail' course.slug %}"
                 ><h3 class="">{{course.title|capfirst}}</h3></a
               >

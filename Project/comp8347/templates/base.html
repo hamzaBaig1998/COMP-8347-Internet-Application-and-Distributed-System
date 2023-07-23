@@ -48,6 +48,7 @@
                         <li><a href="{% url 'courses:course_list' %}">Courses</a></li>
                         <li><a href="{% url 'blogs:post_list' %}">News</a></li>
                         <li><a href="{% url 'courses:contact' %}">Contact</a></li>
+                        <li><a href="{% url 'club:club_details' %}">Membership</a></li>
                         {% if request.user.is_authenticated %}
                             <li><a href="{% url 'users:profile' %}" class="site-btn header-btn">Dashboard : {{ request.user.username }}</a></li>
                             <li><a href="{% url 'account_logout' %}">Logout</a></li>
