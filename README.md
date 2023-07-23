@@ -10,15 +10,16 @@ To get started with the project, follow these steps:
 
 1. Clone the repository:
     https://github.com/hamzaBaig1998/COMP-8347-Internet-Application-and-Distributed-System
-2. Create a virtual environment and activate it:
+   <br> `cd Project\comp8347`
+3. Create a virtual environment and activate it:
 <br>`python -m venv venv`
 <br>`source venv/bin/activate` # for Linux/macOS
 <br>`venv\Scripts\activate`# for Windows
-3. Install the dependencies:
+4. Install the dependencies:
   <br> `pip install -r requirements.txt`
-4. Set up the database:
+5. Set up the database:
    <br>`python manage.py migrate`
-5. Start the development server:
+6. Start the development server:
    <br>`python manage.py runserver`
    
 The website should now be accessible at `http://localhost:8000/`.
