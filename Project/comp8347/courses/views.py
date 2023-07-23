@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from courses.models import Course, Lesson, Category, Request
 from club.models import Order, User, Club
 from courses.form import RequestForm
-
+from django.db.models import Prefetch
 
 from django.shortcuts import render, redirect
 from django.views import View
@@ -60,6 +60,10 @@ class CourseListView(ListView):
     model = Course  # Use the Course model
     context_object_name = 'courses'  # Use 'courses' as the context variable name
     template_name = 'courses/course_list.html'
+    def get_queryset(self):
+        return Course.objects.prefetch_related(
+            Prefetch('club', queryset=Club.objects.all())
+        )
 
 
 # View for the course detail page
