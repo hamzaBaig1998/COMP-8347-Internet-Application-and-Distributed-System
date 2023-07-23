@@ -37,13 +37,13 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('stripe_customer_id', models.CharField(max_length=40)),
-                ('membership', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='memberships.Membership')),
+                ('club', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='club.Membership')),
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.AddField(
             model_name='subscription',
             name='user_membership',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='memberships.UserMembership'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='club.UserMembership'),
         ),
     ]

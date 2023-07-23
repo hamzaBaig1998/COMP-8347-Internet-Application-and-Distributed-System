@@ -6,12 +6,12 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('memberships', '0001_initial'),
+        ('club', '0001_initial'),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='membership',
+            model_name='club',
             name='membership_type',
             field=models.CharField(choices=[('Professional', 'pro'), ('Enterprise', 'ent'), ('Free', 'free')], default='Free', max_length=30),
         ),
