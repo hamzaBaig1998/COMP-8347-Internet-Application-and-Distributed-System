@@ -72,14 +72,15 @@ class CourseDetailView(DetailView):
 # View for the lesson detail page
 class LessonDetailView(LoginRequiredMixin, View):
     def get(self, request, course_slug, lesson_slug, *args, **kwargs):
-        context = {'lesson': None}
-        orders = Order.objects.filter(user_id=request.user.id, result=True)
-        tier = None
-        if orders.exists():
-            tier = orders.last().tier
-        user = User.objects.get(id=request.user.id)
-        if user:
-            context['lesson'] = Club.objects.filter(tier=tier).first().details
+        pass
+        # context = {'lesson': None}
+        # orders = Order.objects.filter(user_id=request.user.id, result=True)
+        # tier = None
+        # if orders.exists():
+        #     tier = orders.last().tier
+        # user = User.objects.get(id=request.user.id)
+        # if user:
+        #     context['lesson'] = Club.objects.filter(tier=tier).first().details
     
 
 class CourseSearchView(ListView):
