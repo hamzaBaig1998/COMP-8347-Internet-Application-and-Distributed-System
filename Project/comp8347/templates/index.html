@@ -1,48 +1,91 @@
-{% extends 'base.html' %}
-{% load static %}
-
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block content %}
 <!-- Hero section -->
-<section class="hero-section set-bg" data-setbg="{% static 'webuni/img/bg.jpg'%}">
+<!-- Hero section with a background image -->
+<section
+  class="hero-section set-bg"
+  data-setbg="{% static 'webuni/img/bg.png'%}"
+>
   <div class="container">
+    <!-- Hero text with a title and description -->
     <div class="hero-text text-white">
-      <h2>Get The Best Free Online Courses</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec malesuada lorem maximus mauris scelerisque, at rutrum nulla <br> dictum. Ut ac ligula sapien. Suspendisse cursus faucibus finibus.</p>
+      <h2>Get The Best Premium Online Courses</h2>
+      <p>
+        We offer a wide range of courses spanning various subjects, from
+        academic topics to professional development and personal growth. Our
+        diverse course catalog ensures that learners can find the perfect fit
+        for their interests and goals
+      </p>
     </div>
+    <!-- Search form for courses with input fields for course name and category -->
     <div class="row">
       <div class="col-lg-10 offset-lg-1">
-        <form class="intro-newslatter">
-          <input type="text" placeholder="Course">
-          <input type="text" class="last-s" placeholder="Category">
+        <form
+          method="GET"
+          class="course-search-form"
+          action="{% url 'courses:course_search' %}"
+        >
+          <input
+            type="text"
+            name="q"
+            placeholder="Course Title"
+            value="{{ request.GET.q }}"
+          />
+          <input
+            type="text"
+            name="category"
+            placeholder="Category"
+            value="{{ request.GET.category }}"
+          />
+          <button type="submit" class="site-btn btn-dark">Search Course</button>
+        </form>
+        {% comment %}
+        <form
+          method="GET"
+          class="course-search-form"
+          action="{% url 'courses:course_search' %}"
+        >
+          <input type="text" placeholder="Enter course name" />
+          <input
+            type="text"
+            class="last-s"
+            placeholder="Enter course category"
+          />
           <button class="site-btn">Search Courses</button>
         </form>
+        {% endcomment %}
       </div>
     </div>
   </div>
 </section>
 <!-- Hero section end -->
 
-
 <!-- categories section -->
 <section class="categories-section spad">
   <div class="container">
+    <!-- Section title with a heading and description -->
     <div class="section-title">
       <h2>Our Course Categories</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec malesuada lorem maximus mauris scelerisque, at rutrum nulla dictum. Ut ac ligula sapien. Suspendisse cursus faucibus finibus.</p>
+      <p>
+        Explore the digital universe with our technology courses, covering
+        programming, web development, and design.
+      </p>
     </div>
+    <!-- Course categories displayed as cards -->
     <div class="row">
-      {% for cat in category %}
+      {% for category, course_count in categories %}
       <!-- categorie -->
-      <div class="col-lg-4 col-md-6">
-        <div class="categorie-item">
-          <div class="ci-thumb set-bg" data-setbg="{% static 'webuni/img/categories/1.jpg' %}"></div>
+      <div class="col-lg-4 col-md-6 p-2">
+        <div class="category-item">
+          <img
+            class="ci-thumb"
+            src="{{ category.image.url }}"
+            alt="{{ category.category }}"
+          />
           <div class="ci-text">
-
-            <h5>{{cat|capfirst}}</h5>
-
-            <p>Lorem ipsum dolor sit amet, consectetur</p>
-            <span>120 Courses</span>
+            <h5 class="h5">{{category.category|capfirst}}</h5>
+            <p class="card-text">
+              <small class="lead text-center">{{course_count}} Courses</small>
+            </p>
           </div>
         </div>
       </div>
@@ -54,20 +97,32 @@
 
 <!-- signup section -->
 <section class="signup-section spad">
-  <div class="signup-bg set-bg" data-setbg="{% static 'webuni/img/signup-bg.jpg' %}"></div>
+  <div
+    class="signup-bg set-bg"
+    data-setbg="{% static 'webuni/img/signup-bg.jpg' %}"
+  ></div>
   <div class="container-fluid">
     <div class="row">
       <div class="col-lg-6">
         <div class="signup-warp">
           <div class="section-title text-white text-left">
-            <h2>Sign up to became a teacher</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec malesuada lorem maximus mauris scelerisque, at rutrum nulla dictum. Ut ac ligula sapien. Suspendisse cursus faucibus finibus.</p>
+            <h2>Sign up to become a teacher</h2>
+            <p>
+              Join our e-learning portal as an instructor and share your
+              expertise with a global community of learners. Empower minds and
+              inspire growth through teaching with us.
+            </p>
           </div>
           <!-- signup form -->
-          <form class="signup-form">
-            <input type="text" placeholder="Your Name" name="name">
-            <input type="text" placeholder="Your E-mail" name="e-mail">
-            <input type="text" placeholder="Your Phone" name="phone">
+          <form
+            class="signup-form"
+            method="POST"
+            action="{% url 'courses:request_teacher' %}"
+          >
+            {% csrf_token %}
+            <input type="text" placeholder="Your Name" name="name" />
+            <input type="text" placeholder="Your E-mail" name="e-mail" />
+            <input type="text" placeholder="Your Phone" name="phone" />
             <button class="site-btn">Make Request</button>
           </form>
         </div>
