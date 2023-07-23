@@ -1,6 +1,27 @@
-<!DOCTYPE html>
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<!-- Page info -->
+<div
+  class="page-info-section set-bg"
+  data-setbg="{% static 'webuni/img/page-bg/2.jpg' %}"
+>
+  <div class="container">
+    <div class="site-breadcrumb">
+      <a href="#">Home</a>
+      <span>Payment Failed</span>
+    </div>
+  </div>
+</div>
+
+<div class="d-flex flex-column align-items-center justify-content-center">
+  <img src="{% static 'webuni/img/payment/failed.png'%}" alt="failed" />
+  <p class="display-4">Payment Failed</p>
+</div>
+
+{% comment %} <!DOCTYPE html>
 <html>
-<body>
-<h1> Payment failed!! </h1>
-</body>
+  <body>
+    <h1>Payment failed!!</h1>
+  </body>
 </html>
+{% endcomment %} {% endblock %}
