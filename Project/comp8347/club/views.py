@@ -139,7 +139,7 @@ class PayView(View):
         else:
             # the user has entered some details and here we need to request the external server for payment status
             import requests
-            txn = requests.post("http://127.0.0.1:8083/pay", data=dict(request.POST))
+            txn = requests.post("http://127.0.0.1:8083/pay", data=dict(request.POST), timeout=5)
             data = json.loads(txn.content)
 
             if data['result'] == "Ok":
