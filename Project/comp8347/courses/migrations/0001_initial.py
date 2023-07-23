@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('memberships', '__first__'),
+        ('club', '__first__'),
     ]
 
     operations = [
@@ -33,7 +33,6 @@ class Migration(migrations.Migration):
                 ('duration', models.CharField(help_text='please use the following formats : 1 Week or 1 Month', max_length=10)),
                 ('starting_date', models.DateField(null=True)),
                 ('ending_date', models.DateField(null=True)),
-                ('allowed_memberships', models.ManyToManyField(related_name='membershipsallowed', to='memberships.Membership')),
                 ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='courses.Category')),
                 ('creator', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],

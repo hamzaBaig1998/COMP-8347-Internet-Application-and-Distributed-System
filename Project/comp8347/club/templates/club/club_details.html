@@ -1,0 +1,55 @@
+{#{% extends 'base.html' %}#}
+{#{% load static %}#}
+
+<html>
+<body>
+{% block content %}
+    <div class="container">
+        {% if type != 'get' %}
+            <h1>Club Tiers</h1>
+            <div class="row">
+                {% for tier in tiers %}
+                    <div>
+                        <h3>{{ tier.tier }}</h3>
+                        {% for key, value in fx_details.items %}
+                            {% if key == tier.price %}
+                                {% for fx, fx_value in value.items %}
+                                    {% if fx_choice == fx %}
+                                        <h4>Price: {{ fx_sign }}{{ fx_value|floatformat:2 }} per month</h4>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                        <h5>Courses included in this tier:</h5>
+                        <ul>
+                            {% for key, detail in club_details.items %}
+                                {% if key == tier.tier %}
+                                    {% for data in detail %}
+                                        <li>{{ data }}</li>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="row">
+                <form method="post" action="{% url 'club:pay' %}">
+                    {% csrf_token %}
+                    {{ tier_form.as_div }}
+                    <input type="submit" value="Proceed">
+                </form>
+            </div>
+        {% else %}
+            <div class="row">
+                <form method="post" action="{% url 'club:club_details' %}">
+                    {% csrf_token %}
+                    {{ fx_form.as_div }}
+                    <input type="submit" value="Proceed">
+                </form>
+            </div>
+        {% endif %}
+    </div>
+{% endblock content %}
+</body>
+</html>

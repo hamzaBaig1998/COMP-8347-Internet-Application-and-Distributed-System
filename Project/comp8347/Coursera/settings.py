@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     # locally made APPs
     'courses',
-    'memberships',
+    'club',
     'users',
     'blog',
     "crispy_forms",
