@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('memberships', '0002_auto_20190919_2250'),
+        # ('memberships', '0002_auto_20190919_2250'),
         ('courses', '0003_auto_20190918_2245'),
     ]
 
@@ -16,11 +16,11 @@ class Migration(migrations.Migration):
             name='category',
             options={'verbose_name_plural': 'categories'},
         ),
-        migrations.AlterField(
-            model_name='course',
-            name='allowed_memberships',
-            field=models.ManyToManyField(related_name='memberships_allowed', to='memberships.membership'),
-        ),
+        # migrations.AlterField(
+        #     model_name='course',
+        #     # name='allowed_memberships',
+        #     field=models.ManyToManyField(related_name='memberships_allowed', to='memberships.membership'),
+        # ),
         migrations.AlterField(
             model_name='course',
             name='category',

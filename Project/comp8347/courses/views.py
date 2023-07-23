@@ -2,13 +2,16 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import TemplateView, ListView, DetailView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from courses.models import Course, Lesson, Category, Request
-from memberships.models import UserMembership
+from club.models import Order, User, Club
 from courses.form import RequestForm
 
 
 from django.shortcuts import render, redirect
 from django.views import View
 from .models import Request
+from django.views.generic import ListView
+from django.db.models import Q
+from .models import Course
 
 class RequestTeacherView(View):
     template_name = 'index.html'
@@ -69,29 +72,15 @@ class CourseDetailView(DetailView):
 # View for the lesson detail page
 class LessonDetailView(LoginRequiredMixin, View):
     def get(self, request, course_slug, lesson_slug, *args, **kwargs):
-        # Retrieve the course and lesson objects
-        course = get_object_or_404(Course, slug=course_slug)
-        lesson = get_object_or_404(Lesson, slug=lesson_slug)
-
-        # Retrieve the user's membership and its type
-        user_membership = get_object_or_404(UserMembership, user=request.user)
-        user_membership_type = user_membership.membership.membership_type
-
-        # Retrieve the membership types allowed for the course
-        course_allowed_membership_type = course.allowed_memberships.all()
-
-        # If the user's membership type is allowed for the course, show the lesson
-        if course_allowed_membership_type.filter(membership_type=user_membership_type).exists():
-            context = {'lesson': lesson}
-        # Otherwise, do not show the lesson
-        else:
-            context = {'lesson': None}
-
-        return render(request, "courses/lesson_detail.html", context)
+        context = {'lesson': None}
+        orders = Order.objects.filter(user_id=request.user.id, result=True)
+        tier = None
+        if orders.exists():
+            tier = orders.last().tier
+        user = User.objects.get(id=request.user.id)
+        if user:
+            context['lesson'] = Club.objects.filter(tier=tier).first().details
     
-from django.views.generic import ListView
-from django.db.models import Q
-from .models import Course
 
 class CourseSearchView(ListView):
     model = Course
