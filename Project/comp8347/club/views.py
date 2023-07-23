@@ -92,7 +92,7 @@ def save_order(session_data, card_details, outcome):
     order_id = session_data['oid']
     user_id = session_data['uid']
     tier = session_data['tier']
-    card_detail = card_details['card_number']
+    card_detail = card_details.get('card_number', '0000000000000000')
     order = Order.objects.create(order_id=order_id,
                                  user_id=user_id,
                                  tier=tier,
@@ -129,6 +129,10 @@ class PayView(View):
             request.session['oid'] = str(order_id)
             request.session['uid'] = user_id
             request.session['tier'] = tier.tier
+
+            if tier.tier == "Free":
+                save_order(request.session, request.POST, True)
+                return render(request, "club/paymentOk.html")
 
             return render(request, "club/payment.html", context={
                 "tier": tier,
