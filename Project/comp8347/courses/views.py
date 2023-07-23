@@ -1,10 +1,24 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import TemplateView, ListView, DetailView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from courses.models import Course, Lesson, Category
+from courses.models import Course, Lesson, Category, Request
 from memberships.models import UserMembership
+from courses.form import RequestForm
 
 
+class RequestView(View):
+    def get(self, request):
+        form = RequestForm()
+        return render(request, 'request.html', {'form': form})
+    
+    def post(self, request):
+        form = RequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, 'request_success.html')
+        else:
+            return render(request, 'request.html', {'form': form})
+    
 # View for the home page
 class HomeView(TemplateView):
     template_name = 'index.html'
@@ -70,7 +84,33 @@ class LessonDetailView(LoginRequiredMixin, View):
 
         return render(request, "courses/lesson_detail.html", context)
     
+from django.views.generic import ListView
+from django.db.models import Q
+from .models import Course
 
+class CourseSearchView(ListView):
+    model = Course
+    template_name = 'courses/course_search.html'
+    context_object_name = 'courses'
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        category = self.request.GET.get('category')
+        queryset = super().get_queryset()
+
+        if query and category:
+            queryset = queryset.filter(
+                Q(title__icontains=query) &
+                Q(category__category__icontains=category)
+            )
+        elif query:
+            queryset = queryset.filter(title__icontains=query)
+        elif category:
+            queryset = queryset.filter(category__category__icontains=category)
+
+        return queryset
+    
+    
 # def get(self,request,course_slug,lesson_slug,*args,**kwargs):
 #
 #     course_qs = Course.objects.filter(slug=course_slug)

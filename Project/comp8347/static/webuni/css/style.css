@@ -155,6 +155,15 @@ ol {
   color: #e0e3e4;
 }
 
+.primary-text {
+  color: #41b3a3;
+}
+
+.btn-primary-color {
+  background-color: #41b3a3;
+  color: #fff;
+}
+
 /*---------------------
   Commom elements
 -----------------------*/
@@ -329,43 +338,53 @@ ol {
   margin-bottom: -34px;
 }
 
-.categorie-item {
+.category-item {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 34px;
+  border-radius: 10px;
   background: #edf4f6;
   -webkit-transition: all 0.4s;
   -o-transition: all 0.4s;
   transition: all 0.4s;
 }
 
-.categorie-item .ci-thumb {
-  background-size: cover;
-  height: 148px;
+.category-item .ci-thumb {
+  max-height: 200px;
+  width: 100%;
+  object-fit: contain;
+  margin-bottom: 10px;
   -webkit-transition: all 0.2s;
   -o-transition: all 0.2s;
   transition: all 0.2s;
 }
 
-.categorie-item .ci-text {
+.category-item .ci-text {
   padding: 40px 35px;
 }
 
-.categorie-item .ci-text h5 {
+.category-item .ci-text h5 {
   margin-bottom: 5px;
 }
 
-.categorie-item .ci-text span {
+.category-item .ci-text span {
   font-size: 18px;
   font-weight: 600;
   color: #41b3a3;
 }
 
-.categorie-item:hover {
+.category-item:hover {
   background: #41b3a3;
 }
 
-.categorie-item:hover .ci-text h5,
-.categorie-item:hover .ci-text p,
-.categorie-item:hover .ci-text span {
+.category-item:hover .ci-text h5,
+.category-item:hover .ci-text p,
+.category-item:hover .ci-text span,
+.category-item:hover .ci-text small {
   color: #fff;
 }
 
@@ -831,7 +850,13 @@ ol {
 =======================*/
 
 .page-info-section {
-  height: 443px;
+  /* height: 443px; */
+  height: 550px;
+  background-attachment: fixed;
+}
+
+#about-us-info-section {
+  background-position: 0 -400px;
 }
 
 .site-breadcrumb {

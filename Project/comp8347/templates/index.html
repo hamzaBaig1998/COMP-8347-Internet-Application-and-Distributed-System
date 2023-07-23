@@ -19,7 +19,31 @@
     <!-- Search form for courses with input fields for course name and category -->
     <div class="row">
       <div class="col-lg-10 offset-lg-1">
-        <form class="intro-newslatter" method="GET">
+        <form
+          method="GET"
+          class="course-search-form"
+          action="{% url 'courses:course_search' %}"
+        >
+          <input
+            type="text"
+            name="q"
+            placeholder="Course Title"
+            value="{{ request.GET.q }}"
+          />
+          <input
+            type="text"
+            name="category"
+            placeholder="Category"
+            value="{{ request.GET.category }}"
+          />
+          <button type="submit" class="site-btn btn-dark">Search Course</button>
+        </form>
+        {% comment %}
+        <form
+          method="GET"
+          class="course-search-form"
+          action="{% url 'courses:course_search' %}"
+        >
           <input type="text" placeholder="Enter course name" />
           <input
             type="text"
@@ -28,6 +52,7 @@
           />
           <button class="site-btn">Search Courses</button>
         </form>
+        {% endcomment %}
       </div>
     </div>
   </div>
@@ -49,12 +74,18 @@
     <!-- Course categories displayed as cards -->
     <div class="row">
       {% for category, course_count in categories %}
-      <div class="col-lg-4 col-md-6">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">{{ category.category|capfirst }}</h5>
+      <!-- categorie -->
+      <div class="col-lg-4 col-md-6 p-2">
+        <div class="category-item">
+          <img
+            class="ci-thumb"
+            src="{{ category.image.url }}"
+            alt="{{ category.category }}"
+          />
+          <div class="ci-text">
+            <h5 class="h5">{{category.category|capfirst}}</h5>
             <p class="card-text">
-              <small class="text-muted">{{ course_count }} Courses</small>
+              <small class="lead text-center">{{course_count}} Courses</small>
             </p>
           </div>
         </div>
@@ -76,15 +107,14 @@
       <div class="col-lg-6">
         <div class="signup-warp">
           <div class="section-title text-white text-left">
-            <h2>Sign up to became a teacher</h2>
+            <h2>Sign up to become a teacher</h2>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-              malesuada lorem maximus mauris scelerisque, at rutrum nulla
-              dictum. Ut ac ligula sapien. Suspendisse cursus faucibus finibus.
+              Share your knowledge and expertise with learners from all over
             </p>
           </div>
           <!-- signup form -->
-          <form class="signup-form">
+          <form class="signup-form" method="POST">
+            {% csrf_token %}
             <input type="text" placeholder="Your Name" name="name" />
             <input type="text" placeholder="Your E-mail" name="e-mail" />
             <input type="text" placeholder="Your Phone" name="phone" />
