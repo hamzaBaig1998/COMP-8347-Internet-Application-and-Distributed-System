@@ -1,5 +1,16 @@
 # COMP-8347-Internet-Application-and-Distributed-System
 
+# Table of Contents
+
+- [Introduction](#introduction)
+- [Getting Started](#getting-started)
+- [Features](#features)
+- [Team Members](#team-members)
+- [Acknowledgement](#acknowledgement)
+
+# Introduction
+This is a GitHub repo for my course COMP-8347, which contains all the labs, projects, and lectures. Below is the information related to the project, which is in the Project\comp8347 folder.
+
 # Django Course Website
 
 This is a course website built with Django where users can learn different skills by taking paid courses. The website features a payment system, allowing users to purchase courses and view them at their convenience.
