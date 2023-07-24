@@ -28,8 +28,24 @@ class FxForm(forms.Form):
     )
 
 
+from django import forms
+
 class PaymentForm(forms.Form):
-    card_number = forms.CharField(max_length=16, min_length=16)
-    card_expiry_month = forms.IntegerField(max_value=12)
-    card_expiry_year = forms.IntegerField(max_value=99)
-    card_expiry_cvv = forms.CharField(min_length=3, max_length=3)
+    card_number = forms.CharField(
+        max_length=16,
+        min_length=16,
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+    card_expiry_month = forms.IntegerField(
+        max_value=12,
+        widget=forms.NumberInput(attrs={'class': 'form-control'})
+    )
+    card_expiry_year = forms.IntegerField(
+        max_value=99,
+        widget=forms.NumberInput(attrs={'class': 'form-control'})
+    )
+    card_expiry_cvv = forms.CharField(
+        min_length=3,
+        max_length=3,
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
