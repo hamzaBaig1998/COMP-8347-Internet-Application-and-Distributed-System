@@ -8,7 +8,11 @@ class TierForm(forms.Form):
     for tier in tiers:
         data.append((tier.id, tier.tier))
 
-    options = forms.ChoiceField(choices=data, label="Select your tier here")
+    options = forms.ChoiceField(
+        choices=data,
+        label="Select your tier here",
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
 
 
 class FxForm(forms.Form):
@@ -17,7 +21,11 @@ class FxForm(forms.Form):
     for fx in fxs:
         data.append((fx.id, fx.fx_name))
 
-    fx_choice = forms.ChoiceField(choices=data, label="Select your Currency here")
+    fx_choice = forms.ChoiceField(
+        choices=data,
+        label="Select your Currency here",
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
 
 
 class PaymentForm(forms.Form):
