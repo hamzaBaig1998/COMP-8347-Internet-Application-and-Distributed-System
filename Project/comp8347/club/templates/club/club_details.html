@@ -16,10 +16,10 @@
 <!-- Page info end -->
     <div class="container">
         {% if type != 'get' %}
-            <h1>Club Tiers</h1>
             <div class="row">
+                <h1 class="text-center lead">Club Tiers</h1>
                 {% for tier in tiers %}
-                    <div>
+                    <div class="rounded border m-2 p-3">
                         <h3>{{ tier.tier }}</h3>
                         {% for key, value in fx_details.items %}
                             {% if key == tier.price %}
