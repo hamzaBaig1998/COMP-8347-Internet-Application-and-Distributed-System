@@ -48,9 +48,7 @@
             <div class="course-text">
               <h5>Category : {{course.category}}</h5>
               {% comment %} <div class="fet-note">Basic Course</div> {% endcomment %}
-              {% for club in course.club.all %}
-              <div class="fet-note">{{club.tier}}</div>
-              {% endfor %}
+              <div class="fet-note">{{ course.club.tier }}</div>
               <a href="{% url 'courses:course_detail' course.slug %}"
                 ><h3 class="">{{course.title|capfirst}}</h3></a
               >
