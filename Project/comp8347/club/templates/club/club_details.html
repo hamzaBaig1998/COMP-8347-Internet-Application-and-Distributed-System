@@ -1,55 +1,77 @@
-{#{% extends 'base.html' %}#}
-{#{% load static %}#}
+{% extends 'base.html' %} {% load static %} {% block content %}
 
-<html>
-<body>
-{% block content %}
+<!-- Page info -->
+<div
+  class="page-info-section set-bg"
+  id="club_detail"
+  data-setbg="{% static 'webuni/img/page-bg/1.jpg' %}"
+>
+  <div class="container">
+    <div class="site-breadcrumb">
+      <a href="#">Home</a>
+      <span>Club details</span>
+    </div>
+  </div>
+</div>
+<!-- Page info end -->
     <div class="container">
+        <h1 class="display-5 text-center">Club Tiers</h1>
         {% if type != 'get' %}
-            <h1>Club Tiers</h1>
             <div class="row">
-                {% for tier in tiers %}
-                    <div>
-                        <h3>{{ tier.tier }}</h3>
-                        {% for key, value in fx_details.items %}
-                            {% if key == tier.price %}
-                                {% for fx, fx_value in value.items %}
-                                    {% if fx_choice == fx %}
-                                        <h4>Price: {{ fx_sign }}{{ fx_value|floatformat:2 }} per month</h4>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                        {% endfor %}
-                        <h5>Courses included in this tier:</h5>
-                        <ul>
-                            {% for key, detail in club_details.items %}
-                                {% if key == tier.tier %}
-                                    {% for data in detail %}
-                                        <li>{{ data }}</li>
+                <div class="d-flex vh-100 justify-content-center align-items-center">
+                    {% for tier in tiers %}
+                        <div class="rounded border m-1 p-1">
+                            <h3 class="px-1">{{ tier.tier }}</h3>
+                            {% for key, value in fx_details.items %}
+                                {% if key == tier.price %}
+                                    {% for fx, fx_value in value.items %}
+                                        {% if fx_choice == fx %}
+                                            <h4 class="lead my-1 px-1">Price: {{ fx_sign }}{{ fx_value|floatformat:2 }} per month</h4>
+                                        {% endif %}
                                     {% endfor %}
                                 {% endif %}
                             {% endfor %}
-                        </ul>
-                    </div>
-                {% endfor %}
+                            <p class="text-small mt-1 px-1">Courses included in this tier:</p>
+                            <ul class="list-group">
+                                {% for key, detail in club_details.items %}
+                                    {% if key == tier.tier %}
+                                        {% for data in detail %}
+                                            <li class="list-group-item">{{ data }}</li>
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
             <div class="row">
-                <form method="post" action="{% url 'club:pay' %}">
-                    {% csrf_token %}
-                    {{ tier_form.as_div }}
-                    <input type="submit" value="Proceed">
-                </form>
+                <div class="col-12">
+                  <div class="d-flex justify-content-center align-items-center py-2">
+                    <div class="rounded border p-3">
+                      <form method="post" action="{% url 'club:pay' %}">
+                        {% csrf_token %}
+                        {{ tier_form.as_div }}
+                        <input type="submit" class="site-btn btn-dark mt-2" value="Proceed">
+                      </form>
+                    </div>
+                  </div>
+                </div>
             </div>
         {% else %}
             <div class="row">
-                <form method="post" action="{% url 'club:club_details' %}">
-                    {% csrf_token %}
-                    {{ fx_form.as_div }}
-                    <input type="submit" value="Proceed">
-                </form>
+                <div class="col-12">
+                  <div class=" d-flex justify-content-center align-items-center py-2 ">
+                    <div class="rounded border p-3">
+                      <form method="post" action="{% url 'club:club_details' %}">
+                        {% csrf_token %}
+                        {{ fx_form.as_div }}
+                        <input type="submit" class="site-btn btn-dark mt-2" value="Proceed">
+                      </form>
+                    </div>
+                  </div>
+                </div>
             </div>
         {% endif %}
     </div>
 {% endblock content %}
-</body>
-</html>

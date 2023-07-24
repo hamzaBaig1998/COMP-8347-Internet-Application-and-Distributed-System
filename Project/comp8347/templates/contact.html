@@ -1,35 +1,49 @@
-{% extends 'base.html' %}
-{% load static %}
-
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block content %}
 
 <!-- Page info -->
-<div class="page-info-section set-bg" data-setbg="{% static 'webuni/img/page-bg/4.jpg' %}">
+<div
+  class="page-info-section set-bg"
+  data-setbg="{% static 'webuni/img/page-bg/5.jpg' %}"
+>
   <div class="container">
     <div class="site-breadcrumb">
-      <a href="#">Home</a>
+      <a href="/">Home</a>
       <span>Contact</span>
     </div>
   </div>
 </div>
 <!-- Page info end -->
 
-
 <!-- search section -->
 <section class="search-section ss-other-page">
   <div class="container">
     <div class="search-warp">
       <div class="section-title text-white">
-        <h2><span>Search your course</span></h2>
+        <h2><span>Search for Your Course</span></h2>
       </div>
       <div class="row">
         <div class="col-lg-10 offset-lg-1">
           <!-- search form -->
-          <form class="course-search-form">
-            <input type="text" placeholder="Course">
-            <input type="text" class="last-m" placeholder="Category">
-            <button class="site-btn btn-dark">Search Couse</button>
+          <form
+            method="GET"
+            class="course-search-form"
+            action="{% url 'courses:course_search' %}"
+          >
+            <input
+              type="text"
+              name="q"
+              placeholder="Course Title"
+              value="{{ request.GET.q }}"
+            />
+            <input
+              type="text"
+              name="category"
+              placeholder="Category"
+              value="{{ request.GET.category }}"
+            />
+            <button type="submit" class="site-btn btn-dark">
+              Search Course
+            </button>
           </form>
         </div>
       </div>
@@ -37,8 +51,6 @@
   </div>
 </section>
 <!-- search section end -->
-
-
 
 <!-- Page -->
 <section class="contact-page spad pb-0">
@@ -48,14 +60,14 @@
         <div class="contact-form-warp">
           <div class="section-title text-white text-left">
             <h2>Get in Touch</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec malesuada lorem maximus mauris scelerisque, at rutrum nulla dictum. Ut ac ligula sapien. </p>
+            <p>Share Your Thoughts With Us.</p>
           </div>
           <form class="contact-form">
-            <input type="text" placeholder="Your Name">
-            <input type="text" placeholder="Your E-mail">
-            <input type="text" placeholder="Subject">
+            <input type="text" placeholder="Your Name" />
+            <input type="email" placeholder="Your E-mail" />
+            <input type="text" placeholder="Subject" />
             <textarea placeholder="Message"></textarea>
-            <button class="site-btn">Sent Message</button>
+            <button class="site-btn">Send Message</button>
           </form>
         </div>
       </div>
@@ -63,16 +75,19 @@
         <div class="contact-info-area">
           <div class="section-title text-left p-0">
             <h2>Contact Info</h2>
-            <p>Donec malesuada lorem maximus mauris scelerisque, at rutrum nulla dictum. Ut ac ligula sapien. Suspendi sse cursus faucibus finibus.</p>
+            <p>
+              We'd love to hear from you! Get in touch with us and we'll get
+              back to you as soon as we can.
+            </p>
           </div>
           <div class="phone-number">
             <span>Direct Line</span>
             <h2>+2348091356855</h2>
           </div>
           <ul class="contact-list">
-            <li>35 Igando Lane <br>Lagos Nigeria</li>
+            <li>Sunset <br />Windsor, CA N9B 2A8</li>
             <li>+2348091356855</li>
-            <li>adebisiayomide07@gmail.com</li>
+            <li>contact@coursepro.com</li>
           </ul>
           <div class="social-links">
             <a href="#"><i class="fa fa-pinterest"></i></a>

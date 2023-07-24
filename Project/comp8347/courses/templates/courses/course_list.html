@@ -24,12 +24,11 @@
       <div class="row">
         <div class="col-lg-10 offset-lg-1">
           <!-- search form -->
-          <form class="course-search-form">
-            <input type="text" placeholder="Course" />
-            <input type="text" class="last-m" placeholder="Category" />
-            <button class="site-btn btn-dark">Search Couse</button>
+          <form method="GET" class="course-search-form" action="{% url 'courses:course_search' %}">
+            <input type="text" name="q" placeholder="Course Title" value="{{ request.GET.q }}">
+            <input type="text" name="category" placeholder="Category" value="{{ request.GET.category }}">
+            <button type="submit" class="site-btn btn-dark">Search Course</button>
           </form>
-        </div>
       </div>
     </div>
   </div>
@@ -48,7 +47,10 @@
           <div class="course-info">
             <div class="course-text">
               <h5>Category : {{course.category}}</h5>
-              <div class="fet-note">Basic Course</div>
+              {% comment %} <div class="fet-note">Basic Course</div> {% endcomment %}
+              {% for club in course.club.all %}
+              <div class="fet-note">{{club.tier}}</div>
+              {% endfor %}
               <a href="{% url 'courses:course_detail' course.slug %}"
                 ><h3 class="">{{course.title|capfirst}}</h3></a
               >

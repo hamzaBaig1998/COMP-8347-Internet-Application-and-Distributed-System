@@ -1,22 +1,15 @@
 import datetime
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView, ListView, DetailView, View
-# from club.models import Membership, UserMembership, Subscription, Club
-from club.models import Club, Fx, Order
-from django.contrib import messages
-from django.http import HttpResponseRedirect
-from django.urls import reverse
-from django.views import View
-import stripe
-from django.conf import settings
-from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
-from django.contrib.auth.models import User
-from club.forms import TierForm, FxForm, PaymentForm
-from club.FxUtil import compute_fx_amount, SYMBOL_MAP, clear_fx_cache
 import json
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.utils.decorators import method_decorator
+from django.views import View
+
+from club.FxUtil import compute_fx_amount, SYMBOL_MAP, clear_fx_cache
+from club.forms import TierForm, FxForm, PaymentForm
+from club.models import Club, Fx, Order
+from courses.models import Course
 
 
 # Create your views here.
@@ -65,17 +58,12 @@ class ClubView(View):
         # print(f"Club details => {clubs}")
         club_details = {}
         fx_details = {}
+        courses = Course.objects.all()
         for club in clubs:
             # print(f"Club data => {club}, club detail => {club.details}")
-            details = club.details.split("\n")
             tier = club.tier
-            for detail in details:
-                data = club_details.get(tier)
-                detail = detail.strip()
-                if data is not None:
-                    club_details[tier].append(detail)
-                else:
-                    club_details[tier] = [detail]
+            details = [course.title.strip() for course in courses.filter(club=club)]
+            club_details[tier] = details
             fx_details[club.price] = compute_fx_details(club.price)
         # print(club_details)
         print(fx_details)
@@ -104,7 +92,7 @@ def save_order(session_data, card_details, outcome):
     order_id = session_data['oid']
     user_id = session_data['uid']
     tier = session_data['tier']
-    card_detail = card_details['card_number']
+    card_detail = card_details.get('card_number', '0000000000000000')
     order = Order.objects.create(order_id=order_id,
                                  user_id=user_id,
                                  tier=tier,
@@ -142,6 +130,10 @@ class PayView(View):
             request.session['uid'] = user_id
             request.session['tier'] = tier.tier
 
+            if tier.tier == "Free":
+                save_order(request.session, request.POST, True)
+                return render(request, "club/paymentOk.html")
+
             return render(request, "club/payment.html", context={
                 "tier": tier,
                 "fx_sign": fx.fx_sign,
@@ -151,7 +143,7 @@ class PayView(View):
         else:
             # the user has entered some details and here we need to request the external server for payment status
             import requests
-            txn = requests.post("http://127.0.0.1:8083/pay", data=dict(request.POST))
+            txn = requests.post("http://127.0.0.1:8083/pay", data=dict(request.POST), timeout=5)
             data = json.loads(txn.content)
 
             if data['result'] == "Ok":

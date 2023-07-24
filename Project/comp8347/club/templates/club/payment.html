@@ -1,17 +1,35 @@
-<!DOCTYPE html>
-<html>
-<body>
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<!-- Page info -->
+<div
+  class="page-info-section set-bg"
+  data-setbg="{% static 'webuni/img/page-bg/2.jpg' %}"
+>
+  <div class="container">
+    <div class="site-breadcrumb">
+      <a href="#">Home</a>
+      <span>Payment</span>
+    </div>
+  </div>
+</div>
+
 <div class='container'>
     <h1>Payment</h1>
     <div class="row">
         <p>Tier Chosen : {{ tier.tier }}</p>
         <p>Price : {{ fx_sign }} {{ amount|floatformat:2 }} per month</p>
-        <form action="{% url 'club:pay' %}" method="post">
-            {% csrf_token %}
-            {{ pay_form.as_p }}
-            <input type="submit" value="Pay">
-        </form>
+        <div class="col-12">
+            <div class="d-flex justify-content-center align-items-center py-2">
+                <div class="rounded border p-3">
+                    <form action="{% url 'club:pay' %}" method="post">
+                        {% csrf_token %}
+                        {{ pay_form.as_p }}
+                        <input type="submit" class="site-btn btn-dark mt-2" value="Pay">
+                    </form>      
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-</body>
-</html>
+
+{% endblock %}
