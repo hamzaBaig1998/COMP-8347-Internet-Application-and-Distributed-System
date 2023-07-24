@@ -10,7 +10,7 @@ SYMBOL_MAP = {
 }
 
 cache = {}
-start_dt = datetime.now().date()
+start_dt = datetime.now().date() - timedelta(days=2)
 end_dt = start_dt + timedelta(days=1)
 
 
