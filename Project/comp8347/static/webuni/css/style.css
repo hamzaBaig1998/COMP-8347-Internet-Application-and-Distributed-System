@@ -855,6 +855,10 @@ ol {
   background-attachment: fixed;
 }
 
+#club_detail {
+  height: 443px;
+}
+
 #about-us-info-section {
   background-position: 0 -400px;
 }
