@@ -84,6 +84,7 @@ def save_order(session_data, card_details, outcome):
     profile = Profile.objects.filter(user=User.objects.get(id=user_id)).first()
     profile.set_club(club)
     profile.save()
+    [course.update_student_count() for course in Course.objects.all()]
     print(f"Profile of {profile} updated with club being {profile.club}")
     return order
 

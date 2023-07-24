@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
 from club.models import Club
+from users.models import Profile
 
 
 # Create your models here.
@@ -34,10 +35,16 @@ class Course(models.Model):
     duration = models.CharField(max_length=10, help_text='Please use the following formats: 1 Week or 1 Month')
     starting_date = models.DateField(null=True)
     ending_date = models.DateField(null=True)
-    club = models.ManyToManyField(Club)
+    club = models.ForeignKey(Club, on_delete=models.CASCADE, default='1')
+    student_count = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title
+
+    def update_student_count(self):
+        self.student_count = Profile.objects.filter(club=self.club).count()
+        self.save()
+        print(f"Updating student count of {self.title} to {self.student_count}")
 
     def get_absolute_url(self):
         return reverse("courses:course_detail", kwargs={"slug": self.slug})
