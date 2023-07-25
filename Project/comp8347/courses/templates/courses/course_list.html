@@ -67,6 +67,9 @@
               <a href="{% url 'courses:course_detail' course.slug %}">
                 <h3>{{ course.title|capfirst }}</h3>
               </a>
+              <p class="text-muted text-small">
+                {{ course.duration|capfirst }}
+              </p>
               <p>{{ course.description }}</p>
               <div class="students">{{ course.student_count }} Students</div>
             </div>
@@ -75,11 +78,7 @@
                 class="ca-pic set-bg"
                 data-setbg="{% static 'webuni/img/authors/2.jpg' %}"
               ></div>
-              <p>{{ course.duration|capfirst }}</p>
-              <p>
-                Created By: {{ course.creator|capfirst }},
-                <span>Developer</span>
-              </p>
+              <p>Created By: {{ course.creator|capfirst }}</p>
             </div>
           </div>
         </div>
