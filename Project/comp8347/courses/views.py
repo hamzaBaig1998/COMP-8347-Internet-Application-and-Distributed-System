@@ -61,7 +61,7 @@ class CourseListView(ListView):
     context_object_name = 'courses'  # Use 'courses' as the context variable name
     template_name = 'courses/course_list.html'
     def get_queryset(self):
-        return Course.objects.prefetch_related(
+        return Course.objects.select_related('creator').prefetch_related(
             Prefetch('club', queryset=Club.objects.all())
         )
 

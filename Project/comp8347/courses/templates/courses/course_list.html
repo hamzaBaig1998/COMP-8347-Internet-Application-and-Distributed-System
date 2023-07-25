@@ -60,7 +60,7 @@
       <div class="row">
         {% for course in courses %}
         <div class="col-lg-6 pb-4">
-          <div class="course-info">
+          <div class="course-info rounded">
             <div class="course-text">
               <h5>Category: {{ course.category|capfirst }}</h5>
               <div class="fet-note">{{ course.club.tier|capfirst }}</div>
@@ -73,12 +73,14 @@
               <p>{{ course.description }}</p>
               <div class="students">{{ course.student_count }} Students</div>
             </div>
-            <div class="course-author">
-              <div
-                class="ca-pic set-bg"
-                data-setbg="{% static 'webuni/img/authors/2.jpg' %}"
-              ></div>
-              <p>Created By: {{ course.creator|capfirst }}</p>
+            <div class="course-author d-flex">
+              <img
+                class="rounded-circle img-fluid"
+                style="width: 80px; height: 80px"
+                src="{{course.creator.profile.profile_pic.url}}"
+                alt=""
+              />
+              <p>Created By: {{ course.creator.username|capfirst }}</p>
             </div>
           </div>
         </div>
