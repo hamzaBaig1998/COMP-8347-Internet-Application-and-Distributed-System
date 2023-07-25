@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import TemplateView, ListView, DetailView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from courses.models import Course, Lesson, Category, Request
+from courses.models import Course, Lesson, Category, Request, Contact
 from club.models import Order, User, Club
 from courses.form import RequestForm
 from django.db.models import Prefetch
@@ -51,8 +51,8 @@ class AboutView(TemplateView):
 
 
 # View for the contact page
-class ContactView(TemplateView):
-    template_name = 'contact.html'
+# class ContactView(TemplateView):
+#     template_name = 'contact.html'
 
 
 # View for the course list page
@@ -68,25 +68,38 @@ class CourseListView(ListView):
 
 # View for the course detail page
 class CourseDetailView(DetailView):
-    model = Course  # Use the Course model
-    context_object_name = 'course'  # Use 'course' as the context variable name
+    model = Course
+    context_object_name = 'course'
     template_name = 'courses/course_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['lessons'] = self.object.lessons.all().order_by('position')
+        return context
 
 
 # View for the lesson detail page
-class LessonDetailView(LoginRequiredMixin, View):
-    def get(self, request, course_slug, lesson_slug, *args, **kwargs):
-        pass
-        # context = {'lesson': None}
-        # orders = Order.objects.filter(user_id=request.user.id, result=True)
-        # tier = None
-        # if orders.exists():
-        #     tier = orders.last().tier
-        # user = User.objects.get(id=request.user.id)
-        # if user:
-        #     context['lesson'] = Club.objects.filter(tier=tier).first().details
-    
+class LessonDetailView(LoginRequiredMixin, DetailView):
+    model = Lesson
+    context_object_name = 'lesson'
+    template_name = 'courses/lesson_detail.html'
 
+    def get_object(self, queryset=None):
+        course_slug = self.kwargs.get('course_slug')
+        lesson_slug = self.kwargs.get('lesson_slug')
+        return get_object_or_404(Lesson, course__slug=course_slug, slug=lesson_slug)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        lesson = context['lesson']
+        orders = Order.objects.filter(user_id=self.request.user.id, result=True)
+        tier = None
+        if orders.exists():
+            tier = orders.last().tier
+        if not lesson.course.club.has_tier(tier):
+            context['membership_required'] = True
+        return context
+    
 class CourseSearchView(ListView):
     model = Course
     template_name = 'courses/course_search.html'
@@ -108,6 +121,20 @@ class CourseSearchView(ListView):
             queryset = queryset.filter(category__category__icontains=category)
 
         return queryset
+    
+
+class ContactView(View):
+    def get(self, request):
+        return render(request, 'contact.html')
+
+    def post(self, request):
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        subject = request.POST.get('subject')
+        message = request.POST.get('message')
+        contact = Contact(name=name, email=email, subject=subject, message=message)
+        contact.save()
+        return render(request, 'contact.html', {'success': True})
     
 
 # def get(self,request,course_slug,lesson_slug,*args,**kwargs):

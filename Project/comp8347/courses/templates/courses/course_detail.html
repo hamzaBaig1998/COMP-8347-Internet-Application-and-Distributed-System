@@ -61,7 +61,7 @@
             <div class="course-meta">
               <div class="cm-info">
                 <h6>Students</h6>
-                <p>120 Registered Students</p>
+                <p>{{course.student_count}} Registered Students</p>
               </div>
             </div>
             <div class="course-meta">
@@ -116,7 +116,7 @@
         </div>
         <div class="cl-item" id="lessons">
           <h4>Lessons In This Course</h4>
-          {% if course.lessons != None %} {% for lesson in course.lessons %}
+          {% if lessons != None %} {% for lesson in lessons %}
           <h5 class="pb-3">
             Lesson {{lesson.position}}
             <a href="{{ lesson.get_absolute_url }}"

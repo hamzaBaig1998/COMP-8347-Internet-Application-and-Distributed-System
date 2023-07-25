@@ -57,6 +57,7 @@
     <div class="row">
       <div class="col-lg-9">
         <!-- blog post -->
+        {% comment %}
         <div class="blog-post">
           <img src="img/blog/1.jpg" alt="" />
           <h3>How to create the perfect resume</h3>
@@ -88,70 +89,21 @@
           </p>
           <a href="#" class="site-btn readmore">Read More</a>
         </div>
-        <!-- blog post -->
-        <div class="blog-post">
-          <img src="img/blog/2.jpg" alt="" />
-          <h3>5 Tips to make money from home</h3>
+        {% endcomment %} {% for post in posts %}
+        <div class="blog-post border rounded p-4">
+          <img src="{{ post.image.url }}" alt="" />
+          <h3>{{post.title}}</h3>
           <div class="blog-metas">
             <div class="blog-meta author">
-              <div
-                class="post-author set-bg"
-                data-setbg="img/authors/2.jpg"
-              ></div>
-              <a href="#">James Smith</a>
+              <a href="#">{{post.author}}</a>
             </div>
             <div class="blog-meta">
-              <a href="#">Development</a>
-            </div>
-            <div class="blog-meta">
-              <a href="#">June 12, 2018</a>
-            </div>
-            <div class="blog-meta">
-              <a href="#">2 Comments</a>
+              <a href="#">{{post.created_date}}</a>
             </div>
           </div>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur. Phasellus sollicitudin et
-            nunc eu efficitur. Sed ligula nulla, molestie quis ligula in,
-            eleifend rhoncus ipsum. Donec ultrices, sem vel efficitur molestie,
-            massa nisl posuere ipsum, ut vulputate mauris ligula a metus. Aenean
-            vel congue diam, sed bibendum ipsum. Nunc vulputate aliquet
-            tristique. Integer et pellentesque urna.
-          </p>
-          <a href="#" class="site-btn readmore">Read More</a>
+          <p>{{post.text}}</p>
         </div>
-        <!-- blog post -->
-        <div class="blog-post">
-          <img src="img/blog/3.jpg" alt="" />
-          <h3>Why choose an online course?</h3>
-          <div class="blog-metas">
-            <div class="blog-meta author">
-              <div
-                class="post-author set-bg"
-                data-setbg="img/authors/3.jpg"
-              ></div>
-              <a href="#">James Smith</a>
-            </div>
-            <div class="blog-meta">
-              <a href="#">Development</a>
-            </div>
-            <div class="blog-meta">
-              <a href="#">June 12, 2018</a>
-            </div>
-            <div class="blog-meta">
-              <a href="#">2 Comments</a>
-            </div>
-          </div>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur. Phasellus sollicitudin et
-            nunc eu efficitur. Sed ligula nulla, molestie quis ligula in,
-            eleifend rhoncus ipsum. Donec ultrices, sem vel efficitur molestie,
-            massa nisl posuere ipsum, ut vulputate mauris ligula a metus. Aenean
-            vel congue diam, sed bibendum ipsum. Nunc vulputate aliquet
-            tristique. Integer et pellentesque urna.
-          </p>
-          <a href="#" class="site-btn readmore">Read More</a>
-        </div>
+        {% endfor %}
         <div class="site-pagination">
           <span class="active">01.</span>
           <a href="#">02.</a>
