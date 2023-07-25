@@ -1,58 +1,40 @@
-{% extends 'base.html' %} {% load static %} {% block post_detail_link %} {%
-endblock %} {% block content %}
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
 <!-- Page info -->
-<div
-  class="page-info-section set-bg"
-  data-setbg="{% static 'webuni/img/page-bg/2.jpg' %}"
->
+<div class="page-info-section set-bg" data-setbg="{% static 'webuni/img/page-bg/2.jpg' %}">
   <div class="container">
     <div class="site-breadcrumb">
-      <a href="#">Home</a>
-      <span>Courses/</span>
-      <span>Courses/</span>
-      <span>Courses/</span>
+      <span>/ Courses / {{ lesson.course.title|capfirst }} / {{ lesson.title }}</span>
     </div>
   </div>
 </div>
-{% if lesson is not None %}
-<li>
-  <a href="{{ lesson.course.get_absolute_url }}"
-    >Course : {{ lesson.course.title }}</a
-  >
-</li>
-<li>Title : {{ lesson.title }}</li>
-{% endif %}
-
 <!-- Page info end -->
 
-<div class="container">
-  <h1>{{ lesson.title }}</h1>
-  <div class="row">
-    <div class="col-sm-6 col-md-6">
-      {% if lesson is not None %}
-      <h3>Topic : {{ lesson.title }}</h3>
-
-      <video
-        controls
-        controlsList="nodownload"
-        poster="{{ lesson.thumbnail.url }}"
-        src="/static/{{ lesson.video_url }}"
-        width="300"
-        height="200"
-      >
-        Sorry, your browser doesn't support embedded videos.
-      </video>
+<div class="container my-5">
+  <h1 class="text-center">{{ lesson.course.title|capfirst }}</h1>
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      {% if lesson.video_url %}
+      <h3 class="text-center my-4">Topic: {{ lesson.title }}</h3>
+      <div class="embed-responsive embed-responsive-16by9">
+        <video class="embed-responsive-item" controls controlsList="nodownload" poster="{{ lesson.thumbnail.url }}">
+          <source src="{{ lesson.video_url.url }}" type="{{ lesson.video_url.content_type }}">
+          Sorry, your browser doesn't support embedded videos.
+        </video>
+      </div>
       {% else %}
-      <h3>Upgrade membership</h3>
-      <p>To view this course you'll need to upgrade your membership</p>
-      <br />
-      <a href="{% url 'club:club_details' %}"
-        ><button class="btn btn-warning">Upgrade Membership</button></a
-      >
-      <hr />
+      <h3 class="text-center my-4">Upgrade Membership</h3>
+      <p class="text-center">To view this course you'll need to upgrade your membership</p>
+      <div class="text-center">
+        <a href="{% url 'club:club_details' %}">
+          <button class="btn btn-warning">Upgrade Membership</button>
+        </a>
+      </div>
+      <hr>
       {% endif %}
     </div>
   </div>
 </div>
 
-{% endblock content %}
+{% endblock %}

@@ -15,6 +15,9 @@ class Club(models.Model):
         club.name, club.price, club.details = name, price, details
         Club.objects.create(club)
         print(f"Club objects: {Club.objects.all()}")
+    
+    def has_tier(self, tier):
+            return self.tier == tier
 
     class Meta:
         ordering = ['price']

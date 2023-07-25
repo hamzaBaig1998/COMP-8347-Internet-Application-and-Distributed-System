@@ -1,5 +1,4 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
-
 <!-- Page info -->
 <div
   class="page-info-section set-bg"
@@ -14,7 +13,7 @@
 </div>
 <!-- Page info end -->
 
-<!-- search section -->
+<!-- Search section -->
 <section class="search-section ss-other-page">
   <div class="container">
     <div class="search-warp">
@@ -23,17 +22,34 @@
       </div>
       <div class="row">
         <div class="col-lg-10 offset-lg-1">
-          <!-- search form -->
-          <form method="GET" class="course-search-form" action="{% url 'courses:course_search' %}">
-            <input type="text" name="q" placeholder="Course Title" value="{{ request.GET.q }}">
-            <input type="text" name="category" placeholder="Category" value="{{ request.GET.category }}">
-            <button type="submit" class="site-btn btn-dark">Search Course</button>
+          <!-- Search form -->
+          <form
+            method="GET"
+            class="course-search-form"
+            action="{% url 'courses:course_search' %}"
+          >
+            <input
+              type="text"
+              name="q"
+              placeholder="Course Title"
+              value="{{ request.GET.q|capfirst }}"
+            />
+            <input
+              type="text"
+              name="category"
+              placeholder="Category"
+              value="{{ request.GET.category|capfirst }}"
+            />
+            <button type="submit" class="site-btn btn-dark">
+              Search Course
+            </button>
           </form>
+        </div>
       </div>
     </div>
   </div>
 </section>
-<!-- search section end -->
+<!-- Search section end -->
 
 <div class="course-warp">
   <ul class="course-filter controls">
@@ -42,17 +58,16 @@
   <div class="featured-courses">
     <div class="featured-course course-item">
       <div class="row">
-        {% for course in courses%}
+        {% for course in courses %}
         <div class="col-lg-6 pb-4">
           <div class="course-info">
             <div class="course-text">
-              <h5>Category : {{course.category}}</h5>
-              {% comment %} <div class="fet-note">Basic Course</div> {% endcomment %}
-              <div class="fet-note">{{ course.club.tier }}</div>
-              <a href="{% url 'courses:course_detail' course.slug %}"
-                ><h3 class="">{{course.title|capfirst}}</h3></a
-              >
-              <p>{{course.description}}</p>
+              <h5>Category: {{ course.category|capfirst }}</h5>
+              <div class="fet-note">{{ course.club.tier|capfirst }}</div>
+              <a href="{% url 'courses:course_detail' course.slug %}">
+                <h3>{{ course.title|capfirst }}</h3>
+              </a>
+              <p>{{ course.description }}</p>
               <div class="students">{{ course.student_count }} Students</div>
             </div>
             <div class="course-author">
@@ -60,9 +75,10 @@
                 class="ca-pic set-bg"
                 data-setbg="{% static 'webuni/img/authors/2.jpg' %}"
               ></div>
-              <p>{{course.duration|capfirst}}</p>
+              <p>{{ course.duration|capfirst }}</p>
               <p>
-                Created By : {{course.creator|capfirst}}, <span>Developer</span>
+                Created By: {{ course.creator|capfirst }},
+                <span>Developer</span>
               </p>
             </div>
           </div>
