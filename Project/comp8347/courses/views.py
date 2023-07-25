@@ -12,6 +12,7 @@ from .models import Request
 from django.views.generic import ListView
 from django.db.models import Q
 from .models import Course
+from django.contrib import messages
 
 class RequestTeacherView(View):
     template_name = 'index.html'
@@ -25,7 +26,8 @@ class RequestTeacherView(View):
         phone = request.POST.get('phone')
         request_obj = Request(name=name, email=email, phone=phone)
         request_obj.save()
-        return redirect('courses:home')
+        messages.success(request, 'Your request was submitted successfully.')
+        return render(request, 'index.html')                                       
     
 # View for the home page
 class HomeView(TemplateView):

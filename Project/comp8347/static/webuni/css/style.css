@@ -915,15 +915,17 @@ ol {
 .course-metas {
   padding-top: 50px;
   margin-bottom: 45px;
-  display: table;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
-.course-meta {
+/* .course-meta {
   display: table-cell;
   height: 100%;
   border-right: 2px solid #c5ced0;
   padding: 5px 50px;
-}
+} */
 
 .course-meta:nth-child(1) {
   padding-left: 0;
@@ -938,19 +940,19 @@ ol {
   margin-bottom: 0;
 }
 
-.course-meta .course-author .ca-pic {
+/* .course-meta .course-author .ca-pic {
   width: 44px;
   height: 44px;
   border-radius: 50%;
   float: left;
-}
+} */
 
-.course-meta .course-author h6 {
+/* .course-meta .course-author h6 {
   padding-left: 60px;
-}
+} */
 
 .course-meta .course-author p {
-  padding-left: 60px;
+  /* padding-left: 60px; */
   margin-bottom: 0;
   padding-top: 4px;
   font-weight: 600;

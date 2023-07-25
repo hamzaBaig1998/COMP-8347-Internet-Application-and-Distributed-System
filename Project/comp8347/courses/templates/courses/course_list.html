@@ -73,14 +73,20 @@
               <p>{{ course.description }}</p>
               <div class="students">{{ course.student_count }} Students</div>
             </div>
-            <div class="course-author d-flex">
-              <img
-                class="rounded-circle img-fluid"
-                style="width: 80px; height: 80px"
-                src="{{course.creator.profile.profile_pic.url}}"
-                alt=""
-              />
-              <p>Created By: {{ course.creator.username|capfirst }}</p>
+            <div class="course-author d-flex align-items-center">
+              <div class="mr-1">
+                <img
+                  class="rounded-circle img-fluid"
+                  style="width: 80px; height: 80px"
+                  src="{{ course.creator.profile.profile_pic.url }}"
+                  alt=""
+                />
+              </div>
+              <div>
+                <p class="mb-0">
+                  <strong>Created By:</strong> {{course.creator.username|capfirst }}
+                </p>
+              </div>
             </div>
           </div>
         </div>
